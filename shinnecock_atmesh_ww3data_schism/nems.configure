@@ -1,0 +1,39 @@
+# `nems.configure` generated with NEMSpy unknown
+# EARTH #
+EARTH_component_list: ATM WAV OCN
+EARTH_attributes::
+  Verbosity = off
+::
+
+# ATM #
+ATM_model:                      atmesh
+ATM_petlist_bounds:             0 0
+ATM_attributes::
+  Verbosity = off
+::
+
+# WAV #
+WAV_model:                      ww3data
+WAV_petlist_bounds:             1 1
+WAV_attributes::
+  Verbosity = off
+::
+
+# OCN #
+OCN_model:                      schism
+OCN_petlist_bounds:             2 5
+OCN_attributes::
+  Verbosity = max
+  DumpFields = false
+::
+
+# Run Sequence #
+runSeq::
+  @3600
+    ATM -> OCN   :remapMethod=bilinear:extrapMethod=nearest_stod
+    WAV -> OCN   :remapMethod=bilinear:extrapMethod=nearest_stod
+    ATM
+    WAV
+    OCN
+  @
+::
