@@ -2,7 +2,7 @@
 total_member:            1
 print_esmf:              .true.
 namelist:                atm_namelist.rc
-PE_MEMBER01:             12
+PE_MEMBER01:             2
 start_year:              2008
 start_month:             8
 start_day:               23
