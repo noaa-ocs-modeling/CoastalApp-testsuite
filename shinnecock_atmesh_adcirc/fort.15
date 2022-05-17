@@ -21,8 +21,8 @@
  0.00                                     ! STATIM - STARTING SIMULATION TIME IN DAYS
  0.00                                     ! REFTIME - REFERENCE TIME (IN DAYS) FOR NODAL FACTORS AND EQUILIBRIUM ARGS
  3600                                     ! WTIMINC - meteorological data time increment, RSTIMINC wave forcing increment
- 14                                       ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
- 7                                        ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
+ 0.250                                    ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
+ 0.125                                    ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
  0.35  0.30  0.35                         ! TIME WEIGHTING FACTORS FOR THE GWCE EQUATION
  0.05 12 12 0.02                          ! H0 - MINIMUM CUTOFF DEPTH
  -72.43 40.66                             ! SLAM0,SFEA0 - CENTER OF CPP PROJECTION (NOT USED IF ICS=1, NTIP=0, NCOR=0)
