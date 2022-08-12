@@ -17,7 +17,7 @@ ATM_attributes::
 
 # OCN #
 OCN_model:                      adcirc
-OCN_petlist_bounds:             1 11
+OCN_petlist_bounds:             1 2
 OCN_attributes::
   Verbosity = high
 ::

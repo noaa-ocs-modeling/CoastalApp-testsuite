@@ -3,21 +3,14 @@
 #############################################
 
 # EARTH #
-EARTH_component_list: ATM OCN
+EARTH_component_list: OCN
 EARTH_attributes::
   Verbosity = low
 ::
 
-# ATM #
-ATM_model:                      atmesh
-ATM_petlist_bounds:             0 0
-ATM_attributes::
-  Verbosity = high
-::
-
 # OCN #
 OCN_model:                      adcirc
-OCN_petlist_bounds:             1 11
+OCN_petlist_bounds:             0 1
 OCN_attributes::
   Verbosity = high
 ::
@@ -25,8 +18,6 @@ OCN_attributes::
 # Run Sequence #
 runSeq::
   @3600
-    ATM -> OCN   :remapMethod=redist
-    ATM
     OCN
   @
 ::
