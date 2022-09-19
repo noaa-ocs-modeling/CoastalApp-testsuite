@@ -17,6 +17,27 @@ See here:
 - https://github.com/schism-dev/pyschism
 
 
+
+## install
+### from github on hera
+Setup this env vars
+```
+export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite}
+export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
+export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
+```
+Then clone CoastalApp-testsuite
+```
+git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
+# echo 'Fetching externals...'
+mkdir -p ${NSEMdir}/fix/
+cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}/fix/.
+
+cd $NSEMdir
+sh set_up_CoastalApp_test.sh
+
+``` 
+
 ## Set up system  
   
 After cloning the codebase, set up an environment variable `$NSEMdir` that points to the 

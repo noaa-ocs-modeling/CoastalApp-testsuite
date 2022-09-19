@@ -38,15 +38,13 @@ export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi
 export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
 export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 
-
-
-
 ############
-# Clone CoastalApp-testsuite
-git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
-# echo 'Fetching externals...'
-mkdir -p ${NSEMdir}/fix/
-cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}/fix/.
+### Clone CoastalApp-testsuite
+##If not already done 
+# git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
+## echo 'Fetching externals...'
+# mkdir -p ${NSEMdir}/fix/
+# cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}/fix/.
 
 
 ############
