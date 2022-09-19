@@ -31,7 +31,7 @@ Then clone CoastalApp-testsuite
 git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
 # echo 'Fetching externals...'
 mkdir -p ${NSEMdir}/fix/
-cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}/fix/.
+ cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}
 
 cd $NSEMdir
 sh set_up_CoastalApp_test.sh
