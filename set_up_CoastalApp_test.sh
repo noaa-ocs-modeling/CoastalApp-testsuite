@@ -34,23 +34,19 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/tests/CoastalApp-testsuite2}
-export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/codes/CoastalApp2}
+export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite}
+export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
 export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 
 
 
 
 ############
-#echo 'Fetching externals...'
-
-
-
-
-############
+# Clone CoastalApp-testsuite
 git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
+# echo 'Fetching externals...'
 mkdir -p ${NSEMdir}/fix/
-cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix/* ${NSEMdir}/fix/*
+cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix ${NSEMdir}/fix/.
 
 
 ############
@@ -61,82 +57,20 @@ git checkout develop_build
 git submodule sync
 git submodule update --init --recursive
 
+#copy extra files for ww3 compile
+cp --fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/ $ROOTDIR/model/esmf
 
 
+#just a hack to update WW3 submodule to point to Andre for the time being
+cp --fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/gitmodules $ROOTDIR/.gitmodules  
+cd $ROOTDIR
+rm -rf WW3
+git submodule update --init --recursive
 
+# build on hera
+./build.sh --component "ATMESH WW3 " --plat hera --compiler intel --clean -2  --thirdparty=parmetis
 
-############
-#echo 'Fetching externals...'
-#mkdir -p ${NSEMdir}/fix/
-#cp -rp /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix/* ${NSEMdir}/fix/*
-############
-
-
-
-
+# point to executeable folder in CoastalApp from CoastalApp-testsuite
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
-########
-export STORM=shinnecock
-#prep COMin
-COMINatm=${COMROOT}/atm/para/${STORM}
 
-
-###
-export  RUN_TYPE=tide_spinup
-spinup_jobid=$(sbatch ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
-spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ecf/jnsem_forecast_spinup.ecf | awk '{print $NF}')
-echo $spinup_jobid
-###
-export RUN_TYPE=atm2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
-###
-export RUN_TYPE=atm2wav2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
-###
-export RUN_TYPE=atm2wav
-#jobid=$(sbatch ecf/jnsem_prep.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
-
-
-# display job queue with dependencies
-squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
-echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
- 
-
-
-##  --------  old part
-#$SBATCH ecf/jnsem_forecast_spinup.ecf
-#$SBATCH ecf/jnsem_prep.ecf
-#$SBATCH ecf/jnsem_forecast.ecf
-#$SBATCH ecf/jnsem_post.ecf
-
-
-
-### from Zach
-#echo deleting previous ADCIRC output
-#sh cleanup.sh
-#DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-
-# run spinup
-#pushd ${DIRECTORY}/spinup >/dev/null 2>&1
-#setup_jobid=$(sbatch setup.job | awk '{print $NF}')
-#spinup_jobid=$(sbatch --dependency=afterok:$setup_jobid adcirc.job | awk '{print $NF}')
-#popd >/dev/null 2>&1
-
-# run configurations
-#for hotstart in ${DIRECTORY}/runs/*/; do
-#    pushd ${hotstart} >/dev/null 2>&1
-#    setup_jobid=$(sbatch setup.job | awk '{print $NF}')
-#    sbatch --dependency=afterok:$setup_jobid:$spinup_jobid adcirc.job
-#    popd >/dev/null 2>&1
-#done
-
-# display job queue with dependencies
-#squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
-#echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
