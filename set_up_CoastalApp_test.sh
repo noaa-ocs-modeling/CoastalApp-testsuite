@@ -34,9 +34,34 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/tests/NSEM-workflow}
-export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/codes/CoastalApp}
+export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/tests/CoastalApp-testsuite2}
+export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/codes/CoastalApp2}
 export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
+
+
+
+
+############
+#echo 'Fetching externals...'
+
+
+
+
+############
+git clone   -b feature/ww3-multi-nodes  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git $NSEMdir
+mkdir -p ${NSEMdir}/fix/
+cp -rpv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix/* ${NSEMdir}/fix/*
+
+
+############
+# Check out codes
+git clone --recursive https://github.com/noaa-ocs-modeling/CoastalApp $ROOTDIR
+cd $ROOTDIR
+git checkout develop_build
+git submodule sync
+git submodule update --init --recursive
+
+
 
 
 
