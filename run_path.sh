@@ -12,7 +12,7 @@
 #
 # Support Team:
 #
-# Contributors: 
+# Contributors:   
 #
 # ----------------------------------------------------------- 
 # ------------- Program Description and Details ------------- 
@@ -36,8 +36,6 @@ set -x
 
 export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/tests/NSEM-workflow}
 export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/codes/CoastalApp}
-export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
-
 
 ############
 #echo 'Fetching externals...'
@@ -49,8 +47,10 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 # for now using the one on hera
 #TODO add py env env file to repo
 
+# set COMROOT
+export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 
-
+# set exec folder
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
 ########

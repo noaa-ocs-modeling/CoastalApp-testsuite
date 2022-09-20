@@ -81,7 +81,7 @@ sh $ROOTDIR/scripts/download_parmetis.sh
 source ${ROOTDIR}/modulefiles/envmodules_intel.hera
 cd ${NSEMdir}/sorc/estofs_tide_fac
 make 
-cp ${NSEMdir}/sorc/estofs_tide_fac/tide_fac $ROOTDIR/ALLBIN_INSTALL
+cp -fv ${NSEMdir}/sorc/estofs_tide_fac/tide_fac $ROOTDIR/ALLBIN_INSTALL
 
 # point to executeable folder in CoastalApp from CoastalApp-testsuite
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
