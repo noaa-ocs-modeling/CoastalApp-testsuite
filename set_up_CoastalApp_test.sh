@@ -35,9 +35,9 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite}
-export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
-export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
+export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
+export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
+
 
 ############
 ### Clone CoastalApp-testsuite
@@ -56,13 +56,13 @@ git checkout develop_build
 git submodule sync
 git submodule update --init --recursive
 
-#just a hack to update WW3 submodule to point to Andre for the time being
-cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/gitmodules $ROOTDIR/.gitmodules  
-rm -rf WW3
-git submodule update --init --recursive
+##just a hack to update WW3 submodule to point to Andre for the time being
+#cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/gitmodules $ROOTDIR/.gitmodules  
+#rm -rf WW3
+#git submodule update --init --recursive
 
 #copy extra files for ww3 compile
-cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/* $ROOTDIR/WW3/model/esmf/.
+cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/* ${ROOTDIR}/WW3/model/esmf/.
 #cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/switch $ROOTDIR/WW3/model/bin/switch
 
 # download parmatis
@@ -75,13 +75,15 @@ sh $ROOTDIR/scripts/download_parmetis.sh
 
 
 
-## Tide_fac
+## Tide_fac only for adecirc
 ### TODO we need to include this in build.sh
 ### This is a hack for now
 source ${ROOTDIR}/modulefiles/envmodules_intel.hera
 cd ${NSEMdir}/sorc/estofs_tide_fac
 make 
 cp -fv ${NSEMdir}/sorc/estofs_tide_fac/tide_fac $ROOTDIR/ALLBIN_INSTALL
+## Tide_fac only for adecirc
+
 
 # point to executeable folder in CoastalApp from CoastalApp-testsuite
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
