@@ -34,8 +34,8 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite}
-export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
+export NSEMdir=$'/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
+export ROOTDIR=$'/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
 
 ############
 #echo 'Fetching externals...'
@@ -54,32 +54,34 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
 ########
-export STORM=shinnecock
+export STORM=florence
 #prep COMin
 COMINatm=${COMROOT}/atm/para/${STORM}
 mkdir -p ${COMINatm}
-cp -fv ${NSEMdir}/fix/forcing/shinnecock/ATM/* ${COMINatm}/.
+cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
 
 ###
 export  RUN_TYPE=tide_spinup
-spinup_jobid=$(sbatch ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
-spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ecf/jnsem_forecast_spinup.ecf | awk '{print $NF}')
+spinup_jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
+spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/jnsem_forecast_spinup_flo.ecf | awk '{print $NF}')
 echo $spinup_jobid
 ###
 export RUN_TYPE=atm2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav
-jobid=$(sbatch ecf/jnsem_prep.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
+
+
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 
 
 # display job queue with dependencies
@@ -89,10 +91,10 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 
 
 ##  --------  old part
-#$SBATCH ecf/jnsem_forecast_spinup.ecf
-#$SBATCH ecf/jnsem_prep.ecf
-#$SBATCH ecf/jnsem_forecast.ecf
-#$SBATCH ecf/jnsem_post.ecf
+#$SBATCH ${NSEMdir}/ecf/jnsem_forecast_spinup.ecf
+#$SBATCH ${NSEMdir}/ecf/jnsem_prep.ecf
+#$SBATCH ${NSEMdir}/ecf/jnsem_forecast.ecf
+#$SBATCH ${NSEMdir}/ecf/jnsem_post.ecf
 
 
 

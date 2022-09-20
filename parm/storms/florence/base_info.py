@@ -336,10 +336,10 @@ elif run_option == 'atm2ocn':
     nems_configure   = 'nems.configure.atm_ocn.IN' 
     # model components
     ocn_name     = 'adcirc'
-    ocn_petlist  = '0 383'
+    ocn_petlist  = '0 998'
     #
     atm_name     = 'atmesh' 
-    atm_petlist  = '384 384'
+    atm_petlist  = '999 999'
     #
     wav_name     = None
     #
@@ -355,7 +355,7 @@ elif run_option == 'atm2wav':
     ocn_name     = None
     # 
     wav_name     = 'ww3'
-    wav_petlist  = '1 719' 
+    wav_petlist  = '1 999' 
     #  
     coupling_interval_sec      = 3600 
     #
@@ -364,10 +364,10 @@ elif run_option in ['wav2ocn','wav&best_track2ocn']:
     nems_configure   = 'nems.configure.wav_ocn.IN' 
     # model components
     ocn_name     = 'adcirc'
-    ocn_petlist  = '0 382'
+    ocn_petlist  = '0 998'
     #
     wav_name     = 'ww3data'
-    wav_petlist  = '383 383'  
+    wav_petlist  = '999 999'  
     #
     atm_name     = None
     #
@@ -378,13 +378,13 @@ elif run_option == 'atm&wav2ocn':
     nems_configure  = 'nems.configure.atm_ocn_wavdata_1loop.IN' 
     #
     ocn_name     = 'adcirc'
-    ocn_petlist  = '0 381'
+    ocn_petlist  = '0 997'
     #
     atm_name     = 'atmesh' 
-    atm_petlist  = '382 382'
+    atm_petlist  = '998 998'
     # 
     wav_name     = 'ww3data'
-    wav_petlist  = '383 383'    
+    wav_petlist  = '999 999'    
     #
     coupling_interval_sec      = 3600  
     #
@@ -396,13 +396,13 @@ elif run_option == 'atm2wav2ocn':
     atm_petlist  = '0 0'
     #
     ocn_name     = 'adcirc'
-    ocn_petlist  = '1 720'
+    ocn_petlist  = '1 199'
     # 
     wav_name     = 'ww3'
-    wav_petlist  = '721 1439' 
+    wav_petlist  = '200 999' 
     #wav_petlist  = '721 2159'
     #  
-    coupling_interval_sec      = 900 
+    coupling_interval_sec      = 3600 
     #
 elif run_option == 'atm2wav-ocn':    
     #NEMS settings
@@ -412,12 +412,12 @@ elif run_option == 'atm2wav-ocn':
     atm_petlist  = '0 0'
     #
     ocn_name     = 'adcirc'
-    ocn_petlist  = '1 720'
+    ocn_petlist  = '1 199'
     # 
     wav_name     = 'ww3'
-    wav_petlist  = '721 1439' 
+    wav_petlist  = '200 999' 
     #  
-    coupling_interval_sec      = 900 
+    coupling_interval_sec      = 3600 
     #
 
 # may be better to move it to main code

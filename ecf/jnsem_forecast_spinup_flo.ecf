@@ -1,0 +1,67 @@
+#!/bin/bash --login
+
+# Contributors: Andre van der Westhuysen
+#
+# ----------------------------------------------------------- 
+# ------------- Program Description and Details ------------- 
+# ----------------------------------------------------------- 
+#
+# Job Card to set the resources required for a NSEM run
+#
+# ----------------------------------------------------------- 
+
+#SBATCH --account=coastal
+#SBATCH --job-name=jnsem_fcst
+#SBATCH -q batch
+#SBATCH --time=08:00:00
+#SBATCH --ntasks=720
+##SBATCH --ntasks=11
+#SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
+#SBATCH --mail-type=ALL
+#SBATCH --output=jnsem_forecast_spinup.out.log
+#SBATCH --error=jnsem_forecast_spinup.err.log
+
+#source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
+source ${ROOTDIR}/modulefiles/envmodules_intel.hera
+
+module list
+
+export model="nsem"
+export MODEL=${model^^}
+
+export envir="para"
+
+export DEVWCOSS_USER=$(whoami)
+#export COMROOT=${COMROOT:-${NSEMdir}/../com}
+
+#Dev environment value for $job and $jobid
+export job=pnsem_forecast
+export jobid=pnsem_forecast.$$
+
+#Dev environment jlogfile
+#mkdir -p ${COMROOT}/logs/${envir}
+#export jlogfile=${COMROOT}/logs/${envir}/jlogfile.${job}
+
+export NWROOT=${NSEMdir}
+
+export RUN_TYPE="tide_spinup"
+${NWROOT}/jobs/J${MODEL}_FORECAST
+
+#%manual
+################################################################################
+#TASKSCRIPT DOCUMENTATION BLOCK
+#TASKSCRIPT:     jnsem_forecast
+#LAST MODIFIER:  Andre van der Westhuysen
+#ORGANIZATION:   IMSG at NOAA/NCEP/EMC
+#DATE:           May 2020
+#FULL NAME:      /nsem/jnsem
+#PURPOSE:        To execute the forecast job for ADC-WW3-NWM model
+#JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
+#                            ${NWROOT}/scripts/exnsem_forecast.sh.ecf
+#################################################################################
+######################################################################
+# Job specific troubleshooting instructions:
+#  see generic troubleshoot manual page
+#
+######################################################################
+#%end
