@@ -45,6 +45,9 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 #cp -rp /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/fix/* ${NSEMdir}/fix/*
 ############
 
+# load python env
+# for now using the one on hera
+#TODO add py env env file to repo
 
 
 
