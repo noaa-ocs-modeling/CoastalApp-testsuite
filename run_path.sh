@@ -34,8 +34,8 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/tests/NSEM-workflow}
-export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/codes/CoastalApp}
+export NSEMdir=${NSEMdir:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite}
+export ROOTDIR=${ROOTDIR:-/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp}
 
 ############
 #echo 'Fetching externals...'
@@ -57,7 +57,8 @@ ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 export STORM=shinnecock
 #prep COMin
 COMINatm=${COMROOT}/atm/para/${STORM}
-
+mkdir -p ${COMINatm}
+cp -fv ${NSEMdir}/fix/forcing/shinnecock/ATM/* ${COMINatm}/.
 
 ###
 export  RUN_TYPE=tide_spinup
@@ -71,14 +72,14 @@ jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk
 jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav
-#jobid=$(sbatch ecf/jnsem_prep.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch ecf/jnsem_prep.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_forecast.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ecf/jnsem_post.ecf      | awk '{print $NF}')
 
 
 # display job queue with dependencies
