@@ -34,8 +34,8 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp-testsuite'
-export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp/CoastalApp'
+export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
+export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
 
 ############
 #echo 'Fetching externals...'
