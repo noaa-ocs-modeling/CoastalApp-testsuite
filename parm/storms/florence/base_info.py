@@ -112,13 +112,11 @@ analysis_end_date   = datetime.datetime(2018,9,16,5,0,0)
    
 #wave and atm files are 
 atm_netcdf_file_names = np.array([
-#    'Florence_HWRF_HRRR_HSOFS.wrfles.nc',
-    'Florence_HWRF_HRRR_HSOFS.nc',
-#    'windOut-Florence.nc4',
+    'Florence_HWRF_HSOFS.nc',
     ])
     
 wav_netcdf_file_names = np.array([
-    '07_ww3.test7.2008_sxy_OC_DA_WRF_SM.nc',
+    'ww3.Florence.201809_sxy.nc',
     ])
 
 if run_option == 'tide_spinup':    
