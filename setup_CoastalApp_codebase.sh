@@ -62,7 +62,8 @@ git submodule update --init --recursive
 #git submodule update --init --recursive
 
 #copy extra files for ww3 compile
-cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/* ${ROOTDIR}/WW3/model/esmf/.
+#cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/* ${ROOTDIR}/WW3/model/esmf/.
+cp -fv ${NSEMdir}/sorc/ww3_extra_files/* ${ROOTDIR}/WW3/model/esmf/.
 #cp -fv /scratch2/COASTAL/coastal/save/shared/CoastalApp_test_fix/ww3_extra_files/switch $ROOTDIR/WW3/model/bin/switch
 
 # download parmatis

@@ -73,17 +73,15 @@ jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo  | awk '{print $NF}')
+#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav
 jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
-
-
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
-
 
 # display job queue with dependencies
 squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
