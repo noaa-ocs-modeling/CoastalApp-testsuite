@@ -54,23 +54,23 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
 ########
-export STORM=florence
+export STORM=irma
 #prep COMin
 COMINatm=${COMROOT}/atm/para/${STORM}
 mkdir -p ${COMINatm}
 cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
 
 ###
-#export  RUN_TYPE=tide_spinup
+export  RUN_TYPE=tide_spinup
 #spinup_jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
 #spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/jnsem_forecast_spinup_flo.ecf | awk '{print $NF}')
 #echo $spinup_jobid
 ###
 export RUN_TYPE=atm2ocn
 #jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
+#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav2ocn
 #jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
@@ -79,9 +79,9 @@ jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav
-jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+#jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
+#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
+#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 
 # display job queue with dependencies
 squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
@@ -94,8 +94,6 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 #$SBATCH ${NSEMdir}/ecf/jnsem_prep.ecf
 #$SBATCH ${NSEMdir}/ecf/jnsem_forecast.ecf
 #$SBATCH ${NSEMdir}/ecf/jnsem_post.ecf
-
-
 
 ### from Zach
 #echo deleting previous ADCIRC output

@@ -105,6 +105,22 @@ def get_run_log():
     #os.system('touch  ' + run_scr)
     return log_file
 
+
+def prep_pahm(run_dir):
+    """
+    Prepare pahm run files
+    uses vars imported from base_info.py
+   
+    """
+    #adcirc
+    #print ' > Prepare adcirc inps ... (take couple of minutes)'
+    txt1 = ' > Prepare adcirc inps ... (take couple of minutes)'
+    logf(txt1,log_file)    
+    
+    # copy HSOFS grid similar for all cases
+    os.system('cp -f ' + pahm_cont_file + '/*.*   ' + run_dir)    
+
+
 def prep_adc(run_dir):
     """
     Prepare adcirc run files

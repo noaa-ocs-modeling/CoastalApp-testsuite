@@ -166,7 +166,28 @@ elif run_option == 'atm2ocn':
     ndays_ramp      = 7.0
     nws             = 17       # atm  Deprecated
     ihot            = 567
+    hot_ndt_out     = ndays * 86400 / dt  
+    
+elif run_option == 'pahm2ocn':    
+    Ver             = 'v1.0' 
+    RunName         = 'a0_SHI_PAHM2OCN'           # Goes to qsub job name
+    #inp files
+    #fetch_hot_from  = main_run_dir + '/a10_SHI_OCN_SPINUP_v10.0/rt_20180531_h13_m01_s30r830'
+    fort15_temp     = 'fort.15.template.atm2ocn'           
+    # Time
+    start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
+    start_date_nems = tide_spin_end_date
+    end_date        = wave_spin_end_date
+    #
+    dt              = 2.0    
+    ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
+    #fort15 options
+    ndays_ramp      = 7.0
+    nws             = 17       # atm  Deprecated
+    ihot            = 567
     hot_ndt_out     = ndays * 86400 / dt    
+    pahm_cont_file  = 'name.nml'
+      
 elif run_option == 'wav2ocn':    
     Ver             = 'v10.0'
     RunName         = 'a60_SHI_WAV2OCN'            # Goes to qsub job name

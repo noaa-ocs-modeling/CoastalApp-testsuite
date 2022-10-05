@@ -233,9 +233,9 @@ elif run_option == 'atm2wav':
     RunName         = 'a57_IKE_ATM2WAV'            # Goes to qsub job name
     #inp files
     fort15_temp     = ''           
-    ww3_multi_tmpl  = 'ww3_multi.inp.sbs.tmpl'
+    ww3_multi_tmpl  = 'ww3_multi.inp.tmpl'
     ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
-    wbound_flg      = True
+    wbound_flg      = False
     wbound_type     = 'nc'
     #Time
     start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
@@ -274,7 +274,7 @@ elif run_option == 'atm2wav2ocn':
     #fetch_hot_from  = main_run_dir + '/a21_IKE_OCN_SPINUP_v1.0/rt_20170712_h16_m12_s57r072/'
     ww3_multi_tmpl  = 'ww3_multi.inp.tmpl'
     ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
-    wbound_flg      = True
+    wbound_flg      = False
     wbound_type     = 'nc'
     #Time
     start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup

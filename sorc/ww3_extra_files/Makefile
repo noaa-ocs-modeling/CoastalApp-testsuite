@@ -173,6 +173,19 @@ gout:
 	$(WW3_BINDIR)/w3_make ww3_prnc
 	$(WW3_BINDIR)/w3_make ww3_ounf
 	$(WW3_BINDIR)/w3_make ww3_ounp
+	@echo "$(SWITCHES)" > $(WW3_BINDIR)/tempswitch
+	@sed -e "s/DIST/SHRD/g"\
+	     -e "s/OMPG/ /g"\
+	     -e "s/OMPH/ /g"\
+             -e "s/MPIT/ /g"\
+             -e "s/MPI/ /g"\
+             -e "s/PDLIB/ /g"\
+             -e "s/NOGRB/NCEP2 NCO/g"\
+                  $(WW3_BINDIR)/tempswitch > $(WW3_BINDIR)/switch
+	\rm -f $(WW3_BINDIR)/tempswitch
+	#$(WW3_BINDIR)/w3_make ww3_grib
+	$(WW3_BINDIR)/w3_make ww3_bound
+	$(WW3_BINDIR)/w3_make ww3_bounc
 	\mkdir -p $(COMP_BINDIR)
 	\cp -f $(WW3_EXEDIR)/ww3_* $(COMP_BINDIR)/
 

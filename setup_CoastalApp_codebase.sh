@@ -36,7 +36,7 @@ export PS4=' $SECONDS + '
 set -x
 
 export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
-export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
+export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-216b060'
 
 
 ############
@@ -52,7 +52,8 @@ export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalap
 # Check out codes
 git clone --recursive https://github.com/noaa-ocs-modeling/CoastalApp $ROOTDIR
 cd $ROOTDIR
-git checkout develop_build
+#git checkout develop_build
+git checkout 216b06032ee47a10ebb7762817752843fc945fec
 git submodule sync
 git submodule update --init --recursive
 
