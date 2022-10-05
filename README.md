@@ -22,9 +22,9 @@ See here:
 ### from github on hera
 Setup this env vars
 ```
-export NSEMdir=${NSEMdir:-CoastalApp-testsuite}
-export ROOTDIR=${ROOTDIR:-CoastalApp}
-export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
+export NSEMdir='../../~~~/CoastalApp-testsuite}
+export ROOTDIR='../../~~~/CoastalApp'
+
 
 ```
 Then clone CoastalApp-testsuite
