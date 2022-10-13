@@ -13,7 +13,7 @@
 #SBATCH --account=coastal
 #SBATCH --job-name=jnsem_fcst
 #SBATCH -q batch
-#SBATCH --time=08:00:00
+#SBATCH --time=00:59:00
 ##SBATCH --ntasks=101
 #SBATCH --ntasks=1000
 ##SBATCH --ntasks=2160

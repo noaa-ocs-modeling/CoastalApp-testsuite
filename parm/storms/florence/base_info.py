@@ -33,7 +33,8 @@ avail_options = [
     'wav2ocn',
     'atm&wav2ocn', 
     'atm2wav2ocn',
-    'atm2wav-ocn'  
+    'atm2wav-ocn',
+    'pam2ocn',  
     ]
 
 #Choose one option based on avail_options 
@@ -209,7 +210,28 @@ elif run_option == 'atm2ocn':
     ndays_ramp      = '7.000 0.000 0.000 0.000 7.000 7.000 1.000 0.000 7.000'
     nws             = 17       # atm  Deprecated
     ihot            = 567
-    hot_ndt_out     = ndays * 86400 / dt    
+    hot_ndt_out     = ndays * 86400 / dt   
+elif run_option == 'pam2ocn':    
+    Ver             = 'v0_' 
+    RunName         = 'a39__PAM2OCN'           # Goes to qsub job name
+    #inp files
+    #fetch_hot_from  = main_run_dir + '/a21_IKE_OCN_SPINUP_v1.0/rt_20170712_h16_m12_s57r072/'
+    fort15_temp     = 'fort.15.template.atm2ocn'           
+    # Time
+    start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
+    start_date_nems = tide_spin_end_date
+    end_date        = wave_spin_end_date
+    #
+    dt              = 2.0    
+    ndays           = (end_date - start_date).total_seconds() / 86400.  #duration in days
+    #fort15 options
+    #AW ndays_ramp      = 5.0
+    ndays_ramp      = '7.000 0.000 0.000 0.000 7.000 7.000 1.000 0.000 7.000'
+    nws             = 17       # atm  Deprecated
+    ihot            = 567
+    hot_ndt_out     = ndays * 86400 / dt        
+    pahm_cnt_file   = 'pahm_control.in'
+    tc_file         = 'florence2018-bdeck.dat' 
 elif run_option == 'wav2ocn':    
     Ver             = 'v1.0_7t' 
     RunName         = 'a47_IKE_WAV2OCN'            # Goes to qsub job name
@@ -230,12 +252,12 @@ elif run_option == 'wav2ocn':
     hot_ndt_out     = ndays * 86400 / dt 
 elif run_option == 'atm2wav':    
     Ver             = 'v1.0_7t' 
-    RunName         = 'a57_IKE_ATM2WAV'            # Goes to qsub job name
+    RunName         = 'a57_FLO_ATM2WAV'            # Goes to qsub job name
     #inp files
     fort15_temp     = ''           
-    ww3_multi_tmpl  = 'ww3_multi.inp.tmpl'
+    ww3_multi_tmpl  = 'ww3_multi.inp.sbs.tmpl'
     ww3_ounf_tmpl   = 'ww3_ounf.inp.tmpl'
-    wbound_flg      = False
+    wbound_flg      = True
     wbound_type     = 'nc'
     #Time
     start_date      = tide_spin_start_date  #current time is set by hotfile therefore we should use the same start time as 1st spinup
@@ -329,14 +351,20 @@ if run_option in ['tide_spinup','tide_baserun','best_track2ocn']:
     #
     coupling_interval_sec      = 3600 
     #
-elif run_option == 'atm2ocn':    
+elif run_option in ['atm2ocn' , 'pam2ocn']:    
     #NEMS settings
     nems_configure   = 'nems.configure.atm_ocn.IN' 
     # model components
     ocn_name     = 'adcirc'
     ocn_petlist  = '0 998'
     #
-    atm_name     = 'atmesh' 
+    if   run_option == 'atm2ocn':
+        atm_name     = 'atmesh' 
+    elif run_option == 'pam2ocn':
+        atm_name     = 'pahm'
+    else:
+        sys.exit('Error: Define correct atm_name ...')     
+    #
     atm_petlist  = '999 999'
     #
     wav_name     = None

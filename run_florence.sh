@@ -34,8 +34,8 @@
 export PS4=' $SECONDS + '
 set -x
 
-export NSEMdir=$'/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
-export ROOTDIR=$'/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
+export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
+export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
 
 ############
 #echo 'Fetching externals...'
@@ -54,7 +54,7 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
 ########
-export STORM=irma
+export STORM=florence
 #prep COMin
 COMINatm=${COMROOT}/atm/para/${STORM}
 mkdir -p ${COMINatm}
@@ -62,31 +62,62 @@ cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
 
 ###
 export  RUN_TYPE=tide_spinup
-#spinup_jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
-#spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/jnsem_forecast_spinup_flo.ecf | awk '{print $NF}')
-#echo $spinup_jobid
+spinup_jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
+spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/jnsem_forecast_spinup_flo.ecf | awk '{print $NF}')
+echo $spinup_jobid
 ###
 export RUN_TYPE=atm2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
 #jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
+export RUN_TYPE=pam2ocn
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+###
+
+
+## prep wav bou info
+COMINwav=${COMROOT}/ww3/para/${STORM}
+mkdir -p ${COMINwav}
+cp -fv ${NSEMdir}/fix/bou/${STORM}/WAV/* ${COMINwav}/.
+
+
 export RUN_TYPE=atm2wav2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
+#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
 jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 ###
 export RUN_TYPE=atm2wav
-#jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
 
 # display job queue with dependencies
 squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
 echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
  
+
+
+
+
+
+# Need for ww3 run from andre video:
+# see pahm-adcirc-ww3-florence_hsofs_rerun2/run
+# cp -p *mod* .
+# cp -p *.inp .
+# cp -p *nest*
+# rm rads.64.nc
+# cp *rads*
+
+
+
+
+
 
 
 ##  --------  old part
@@ -117,3 +148,9 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 # display job queue with dependencies
 #squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
 #echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
+
+
+
+
+
+

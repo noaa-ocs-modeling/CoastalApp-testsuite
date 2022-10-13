@@ -43,6 +43,7 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
    [ "${RUN_TYPE}" != "wav2ocn" ] &&
    [ "${RUN_TYPE}" != "atm&wav2ocn" ] &&
    [ "${RUN_TYPE}" != "atm2wav2ocn" ] &&
+   [ "${RUN_TYPE}" != "pam2ocn" ] &&   
    [ "${RUN_TYPE}" != "atm2wav-ocn" ]
     then 
     echo "*** ERROR - Your RUN_TYPE environment variable is not set, or not valid. Valid options are:"
@@ -51,6 +52,7 @@ if [ "${RUN_TYPE}" != "tide_spinup" ] &&
     echo "best_track2ocn"
     echo "wav&best_track2ocn"
     echo "atm2ocn"
+    echo "pam2ocn"        
     echo "wav2ocn"
     echo "atm&wav2ocn"
     echo "atm2wav2ocn"

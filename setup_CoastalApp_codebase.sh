@@ -36,7 +36,7 @@ export PS4=' $SECONDS + '
 set -x
 
 export NSEMdir='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-testsuite'
-export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp-216b060'
+export ROOTDIR='/scratch2/COASTAL/coastal/noscrub/shared/Saeed.Moghimi/coastalapp_test/temp3/CoastalApp'
 
 
 ############
@@ -73,9 +73,7 @@ cp -fv ${NSEMdir}/sorc/ww3_extra_files/* ${ROOTDIR}/WW3/model/esmf/.
 sh $ROOTDIR/scripts/download_parmetis.sh
 
 # build on hera
-./build.sh --component "ATMESH WW3 ADCIRC WW3DATA " --plat hera --compiler intel --clean -2  --thirdparty=parmetis
-
-
+./build.sh --component "ATMESH WW3 ADCIRC WW3DATA PAHM " --plat hera --compiler intel --clean -2  --thirdparty=parmetis
 
 ## Tide_fac only for adecirc
 ### TODO we need to include this in build.sh

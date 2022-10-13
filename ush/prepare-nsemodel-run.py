@@ -50,7 +50,10 @@ COMINwavdata = os.getenv('COMINwavdata')
 COMINadc = os.getenv('COMINadc')
 STORM = os.getenv('STORM')
 RUN_TYPE = os.getenv('RUN_TYPE')
+NSEMdir  = os.getenv('NSEMdir')
 
+
+print ( 'llllllllllllllllllllllllllllll >>>>>>>>>>>>>>>>>>' , NSEMdir , RUN_TYPE)
 sys.path.append(USHnsem)
 import nsem_utils
 
@@ -112,14 +115,18 @@ def prep_pahm(run_dir):
     uses vars imported from base_info.py
    
     """
-    #adcirc
-    #print ' > Prepare adcirc inps ... (take couple of minutes)'
-    txt1 = ' > Prepare adcirc inps ... (take couple of minutes)'
-    logf(txt1,log_file)    
-    
-    # copy HSOFS grid similar for all cases
-    os.system('cp -f ' + pahm_cont_file + '/*.*   ' + run_dir)    
 
+    txt1 = ' > Prepare PAHM inps ... '
+    logf(txt1,log_file)    
+ 
+    pahm_cnt = os.path.join(NSEMdir+'/fix/forcing/',STORM,'PAHM',base_info.pahm_cnt_file)
+    
+
+    
+    pahm_tc  = os.path.join(SEMdir+'/fix/forcing/',STORM,'PAHM',base_info.tc_file)
+    # copy HSOFS grid similar for all cases
+    os.system('cp -f ' + pahm_cnt + ' ' + run_dir)    
+    os.system('cp -f ' + pahm_tc  + ' ' + run_dir)    
 
 def prep_adc(run_dir):
     """
@@ -414,7 +421,7 @@ def prep_nems(run_dir):
             os.system ('mkdir -p  ' +  wav_dir                                   )
             os.system ('cp    -f  ' +  wav_inp_file + ' ' + wav_rundir_file      )
 
-    if base_info.atm_name is not None:
+    if base_info.atm_name == 'atmesh':
         #atm_dir   = os.path.join(run_dir, os.path.normpath(base_info.atm_inp_dir).split('/')[-1])
         atm_dir = COMINatm
         os.system ('echo " atm_dir: ' +  atm_dir                        + ' " >> ' + apps_conf )
@@ -434,6 +441,11 @@ def prep_nems(run_dir):
             logf(txt1,log_file)                  
             os.system ('mkdir -p  ' +  atm_dir                                   )
             os.system ('cp    -f  ' +  atm_inp_file + ' ' + atm_rundir_file      )               
+
+
+    if base_info.atm_name == 'pahm':
+        prep_pahm(run_dir)
+        
 
 def get_tidal_fact(run_dir):
     """
