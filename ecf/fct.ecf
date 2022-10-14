@@ -6,25 +6,46 @@
 # ------------- Program Description and Details ------------- 
 # ----------------------------------------------------------- 
 #
-# Job Card to set the resources required for a NSEM spinuprun
+# Job Card to set the resources required for a NSEM run
 #
 # ----------------------------------------------------------- 
 
 #SBATCH --account=coastal
-#SBATCH --job-name=jnsem_prep
+#SBATCH --job-name=fct
 #SBATCH -q batch
-#SBATCH --time=00:30:00
-#SBATCH --mem 64000M
-#SBATCH --ntasks=1
+#SBATCH --time=00:59:00
+##SBATCH --ntasks=101
+#SBATCH --ntasks=1000
+##SBATCH --ntasks=2160
+##SBATCH --ntasks=720
+##SBATCH --ntasks=385
+##SBATCH --nodes=120
+##SBATCH --nodes=101
+#SBATCH --mem 300000
+#SBATCH --cpus-per-task=1            # Number of cores per MPI rank (for hyperthreading)
+##SBATCH --nodes=121                 # Number of nodes
+##SBATCH --ntasks-per-node=12        # How many tasks on each node
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
-#SBATCH --output=jnsem_prep_spinup.out.log
-#SBATCH --error=jnsem_prep_spinup.err.log
+#SBATCH --output=hsofs_fct.out.log
+#SBATCH --error=hsofs_fct.err.log
 
 #source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
 source ${ROOTDIR}/modulefiles/envmodules_intel.hera
+#source /scratch2/COASTAL/coastal/save/Andre.VanderWesthuysen/ADC-WW3-NWM-NEMS/modulefiles/hera/ESMF_NUOPC
+#module load intel/19.0.5.281
+#module load wgrib2/2.0.8
+#module load nco/4.9.1
 
 module list
+
+ulimit -s unlimited
+ulimit -c 0
+
+export OMP_NUM_THREADS=1
+export KMP_AFFINITY=disabled
+export KMP_STACKSIZE=2G
+export IOBUF_PARAMS='*:size=1M:count=4:vbuffer_count=4096:prefetch=1'
 
 export model="nsem"
 export MODEL=${model^^}
@@ -33,11 +54,10 @@ export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
 #export COMROOT=${COMROOT:-${NSEMdir}/../com}
-echo $COMROOT
-
+echo 'COMROTTTTTT' $COMROOT
 #Dev environment value for $job and $jobid
-export job=pnsem_prep
-export jobid=pnsem_prep.$$
+export job=pnsem_forecast
+export jobid=pnsem_forecast.$$
 
 #Dev environment jlogfile
 #mkdir -p ${COMROOT}/logs/${envir}
@@ -45,20 +65,23 @@ export jobid=pnsem_prep.$$
 
 export NWROOT=${NSEMdir}
 
-export RUN_TYPE="tide_spinup"
-${NWROOT}/jobs/J${MODEL}_PREP
+${NWROOT}/jobs/J${MODEL}_FORECAST
+
+# Get memory usage report
+# NOTE: To do this interactively on the comaand line, use $report-mem -j $jobid
+report-mem
 
 #%manual
 ################################################################################
 #TASKSCRIPT DOCUMENTATION BLOCK
-#TASKSCRIPT:     jnsem_prep
+#TASKSCRIPT:     jnsem_forecast
 #LAST MODIFIER:  Andre van der Westhuysen
 #ORGANIZATION:   IMSG at NOAA/NCEP/EMC
 #DATE:           May 2020
 #FULL NAME:      /nsem/jnsem
-#PURPOSE:        To execute the job that preps the input files for ADC-WW3-NWM model
+#PURPOSE:        To execute the forecast job for ADC-WW3-NWM model
 #JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
-#                            ${NWROOT}/scripts/exnsem_prep.sh.ecf
+#                            ${NWROOT}/scripts/exnsem_forecast.sh.ecf
 #################################################################################
 ######################################################################
 # Job specific troubleshooting instructions:

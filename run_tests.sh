@@ -53,42 +53,57 @@ export COMROOT=${COMROOT:-${NSEMdir}/../${USER}/com/}
 # set exec folder
 ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
-########
-export STORM=shinnecock
-###
-export  RUN_TYPE=tide_spinup
-spinup_jobid=$(sbatch ${NSEMdir}/ecf/prep_spinup.ecf | awk '{print $NF}')
-spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/spinup_shi.ecf | awk '{print $NF}')
-echo $spinup_jobid
-###
-#prep COMin
-COMINatm=${COMROOT}/atm/para/${STORM}
-mkdir -p ${COMINatm}
-cp -fv ${NSEMdir}/fix/forcing/shinnecock/ATM/* ${COMINatm}/.
-###
-run_types=" atm2ocn pam2ocn atm2wav2ocn "
-for RUN_TYPE in $run_types ; do 
-    export RUN_TYPE=$RUN_TYPE
-    echo "RUN_TYPE $RUN_TYPE";
-    jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
-    #jobid=$(sbatch                                     ${NSEMdir}/ecf/prep.ecf     | awk '{print $NF}')
-    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/fct_shi.ecf       | awk '{print $NF}')
-    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
+
+storms=" shinnecock florence "
+
+for STORM in $storms ; do 
+    ########
+    export STORM=$STORM
+    ###
+    # if condition is true
+    if [ $STORM == florence ];
+    then
+        echo "    > Prep atm forcing and wav boundary for $STORM "
+
+        #prep atm forcing
+        COMINatm=${COMROOT}/atm/para/${STORM}
+        mkdir -p ${COMINatm}
+        cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
+        ###
+        ## prep wav bou info
+        COMINwav=${COMROOT}/ww3/para/${STORM}
+        mkdir -p ${COMINwav}
+        cp -fv ${NSEMdir}/fix/bou/${STORM}/WAV/* ${COMINwav}/.
+
+        spinup=spinup.ecf
+        fct=fct.ecf
+    else
+       #shinnecock    
+        spinup=spinup_shi.ecf
+        fct=fct_shi.ecf  
+    fi
+    ###
+    export  RUN_TYPE=tide_spinup
+    spinup_jobid=$(sbatch ${NSEMdir}/ecf/prep_spinup.ecf | awk '{print $NF}')
+    spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/${spinup} | awk '{print $NF}')
+    echo $spinup_jobid
+    ###
+    ## runs depends on ocn spin up
+    run_types=" atm2ocn pam2ocn atm2wav2ocn "
+    for RUN_TYPE in $run_types ; do 
+        export RUN_TYPE=$RUN_TYPE
+        echo "RUN_TYPE $RUN_TYPE";
+        jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
+        #jobid=$(sbatch                                    ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
+        jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/${fct}        | awk '{print $NF}')
+        jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
+    done
+
+    export RUN_TYPE=atm2wav
+    jobid=$(sbatch ${NSEMdir}/ecf/prep.ecf  | awk '{print $NF}')
+    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/${fct}           | awk '{print $NF}')
+    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf         | awk '{print $NF}')
 done
-
-###
-export RUN_TYPE=atm2wav
-jobid=$(sbatch ${NSEMdir}/ecf/prep.ecf                                          | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/fct_shi.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
-###
-
-
-
-
-
-
-
 # display job queue with dependencies
 squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
 echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
@@ -98,29 +113,17 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 
 
 
+# Need for ww3 run from andre video:
+# see pahm-adcirc-ww3-florence_hsofs_rerun2/run
+# cp -p *mod* .
+# cp -p *.inp .
+# cp -p *nest*
+# rm rads.64.nc
+# cp *rads*
 
 
 
 
-
-#########################3
-###
-#export RUN_TYPE=atm2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
-###
-#export RUN_TYPE=pam2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch                                     ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
-###
-#export RUN_TYPE=atm2wav2ocn
-#jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/forecast.ecf  | awk '{print $NF}')
-#jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
-###
 
 
 
@@ -129,8 +132,6 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 #$SBATCH ${NSEMdir}/ecf/prep.ecf
 #$SBATCH ${NSEMdir}/ecf/forecast.ecf
 #$SBATCH ${NSEMdir}/ecf/post.ecf
-
-
 
 ### from Zach
 #echo deleting previous ADCIRC output
@@ -154,3 +155,9 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 # display job queue with dependencies
 #squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
 #echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
+
+
+
+
+
+

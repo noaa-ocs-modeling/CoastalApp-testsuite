@@ -55,47 +55,48 @@ ln -sfv ${ROOTDIR}/ALLBIN_INSTALL  ${NSEMdir}/exec
 
 ########
 export STORM=florence
-#prep COMin
-COMINatm=${COMROOT}/atm/para/${STORM}
-mkdir -p ${COMINatm}
-cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
-
 ###
 export  RUN_TYPE=tide_spinup
-spinup_jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep_spinup.ecf | awk '{print $NF}')
-spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/jnsem_forecast_spinup_flo.ecf | awk '{print $NF}')
+spinup_jobid=$(sbatch ${NSEMdir}/ecf/prep_spinup.ecf | awk '{print $NF}')
+spinup_jobid=$(sbatch --dependency=afterok:$spinup_jobid ${NSEMdir}/ecf/spinup.ecf | awk '{print $NF}')
 echo $spinup_jobid
 ###
-export RUN_TYPE=atm2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+
+
+# if condition is true
+if [ $STORM == florence ];
+then
+    echo "    > Prep atm forcing and wav boundary for $STORM "
+
+    #prep atm forcing
+    COMINatm=${COMROOT}/atm/para/${STORM}
+    mkdir -p ${COMINatm}
+    cp -fv ${NSEMdir}/fix/forcing/${STORM}/ATM/* ${COMINatm}/.
+    ###
+    ## prep wav bou info
+    COMINwav=${COMROOT}/ww3/para/${STORM}
+    mkdir -p ${COMINwav}
+    cp -fv ${NSEMdir}/fix/bou/${STORM}/WAV/* ${COMINwav}/.
+fi
+
+
 ###
-export RUN_TYPE=pam2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
-###
+## runs depends on ocn spin up
+run_types=" atm2ocn pam2ocn atm2wav2ocn "
+for RUN_TYPE in $run_types ; do 
+    export RUN_TYPE=$RUN_TYPE
+    echo "RUN_TYPE $RUN_TYPE";
+    jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
+    #jobid=$(sbatch                                    ${NSEMdir}/ecf/prep.ecf      | awk '{print $NF}')
+    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/fct.ecf  | awk '{print $NF}')
+    jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf      | awk '{print $NF}')
+done
 
 
-## prep wav bou info
-COMINwav=${COMROOT}/ww3/para/${STORM}
-mkdir -p ${COMINwav}
-cp -fv ${NSEMdir}/fix/bou/${STORM}/WAV/* ${COMINwav}/.
-
-
-export RUN_TYPE=atm2wav2ocn
-jobid=$(sbatch --dependency=afterok:$spinup_jobid  ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-#jobid=$(sbatch                                     ${NSEMdir}/ecf/jnsem_prep.ecf      | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
-###
 export RUN_TYPE=atm2wav
-jobid=$(sbatch ${NSEMdir}/ecf/jnsem_prep.ecf  | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_forecast_flo.ecf | awk '{print $NF}')
-jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/jnsem_post.ecf      | awk '{print $NF}')
+jobid=$(sbatch ${NSEMdir}/ecf/prep.ecf  | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/fct.ecf | awk '{print $NF}')
+jobid=$(sbatch --dependency=afterok:$jobid         ${NSEMdir}/ecf/post.ecf         | awk '{print $NF}')
 
 # display job queue with dependencies
 squeue -u $USER -o "%.8i %3C %4D %16E %12R %j" --sort i
@@ -121,10 +122,10 @@ echo squeue -u $USER -o \"%.8i %3C %4D %16E %12R %j\" --sort i
 
 
 ##  --------  old part
-#$SBATCH ${NSEMdir}/ecf/jnsem_forecast_spinup.ecf
-#$SBATCH ${NSEMdir}/ecf/jnsem_prep.ecf
-#$SBATCH ${NSEMdir}/ecf/jnsem_forecast.ecf
-#$SBATCH ${NSEMdir}/ecf/jnsem_post.ecf
+#$SBATCH ${NSEMdir}/ecf/forecast_spinup.ecf
+#$SBATCH ${NSEMdir}/ecf/prep.ecf
+#$SBATCH ${NSEMdir}/ecf/forecast.ecf
+#$SBATCH ${NSEMdir}/ecf/post.ecf
 
 ### from Zach
 #echo deleting previous ADCIRC output

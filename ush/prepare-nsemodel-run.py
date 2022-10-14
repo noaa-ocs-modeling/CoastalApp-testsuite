@@ -120,10 +120,8 @@ def prep_pahm(run_dir):
     logf(txt1,log_file)    
  
     pahm_cnt = os.path.join(NSEMdir+'/fix/forcing/',STORM,'PAHM',base_info.pahm_cnt_file)
-    
+    pahm_tc  = os.path.join(NSEMdir+'/fix/forcing/',STORM,'PAHM',base_info.tc_file)
 
-    
-    pahm_tc  = os.path.join(SEMdir+'/fix/forcing/',STORM,'PAHM',base_info.tc_file)
     # copy HSOFS grid similar for all cases
     os.system('cp -f ' + pahm_cnt + ' ' + run_dir)    
     os.system('cp -f ' + pahm_tc  + ' ' + run_dir)    

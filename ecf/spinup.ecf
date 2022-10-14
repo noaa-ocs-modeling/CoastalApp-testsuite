@@ -11,15 +11,15 @@
 # ----------------------------------------------------------- 
 
 #SBATCH --account=coastal
-#SBATCH --job-name=jnsem_po
+#SBATCH --job-name=spin_flo
 #SBATCH -q batch
-#SBATCH --time=02:00:00
-#SBATCH --ntasks=1
-#SBATCH --mem 64000M
+#SBATCH --time=08:00:00
+#SBATCH --ntasks=720
+##SBATCH --ntasks=11
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
-#SBATCH --output=jnsem_post.out.log
-#SBATCH --error=jnsem_post.err.log
+#SBATCH --output=hsofs_spinup.out.log
+#SBATCH --error=hsofs_spinup.err.log
 
 #source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
 source ${ROOTDIR}/modulefiles/envmodules_intel.hera
@@ -32,12 +32,11 @@ export MODEL=${model^^}
 export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
-#export COMROOT=/scratch2/COASTAL/coastal/save/com
 #export COMROOT=${COMROOT:-${NSEMdir}/../com}
 
 #Dev environment value for $job and $jobid
-export job=pnsem_post
-export jobid=pnsem_post.$$
+export job=pnsem_forecast
+export jobid=pnsem_forecast.$$
 
 #Dev environment jlogfile
 #mkdir -p ${COMROOT}/logs/${envir}
@@ -45,19 +44,20 @@ export jobid=pnsem_post.$$
 
 export NWROOT=${NSEMdir}
 
-${NWROOT}/jobs/J${MODEL}_POST
+export RUN_TYPE="tide_spinup"
+${NWROOT}/jobs/J${MODEL}_FORECAST
 
 #%manual
 ################################################################################
 #TASKSCRIPT DOCUMENTATION BLOCK
-#TASKSCRIPT:     jnsem_post
+#TASKSCRIPT:     jnsem_forecast
 #LAST MODIFIER:  Andre van der Westhuysen
 #ORGANIZATION:   IMSG at NOAA/NCEP/EMC
 #DATE:           May 2020
 #FULL NAME:      /nsem/jnsem
-#PURPOSE:        To execute job that post-processes output of the ADC-WW3-NWM model
+#PURPOSE:        To execute the forecast job for ADC-WW3-NWM model
 #JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
-#                            ${NWROOT}/scripts/exnsem_post.sh.ecf
+#                            ${NWROOT}/scripts/exnsem_forecast.sh.ecf
 #################################################################################
 ######################################################################
 # Job specific troubleshooting instructions:

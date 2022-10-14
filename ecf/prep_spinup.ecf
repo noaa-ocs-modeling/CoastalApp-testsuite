@@ -6,20 +6,20 @@
 # ------------- Program Description and Details ------------- 
 # ----------------------------------------------------------- 
 #
-# Job Card to set the resources required for a NSEM run
+# Job Card to set the resources required for a NSEM spinuprun
 #
 # ----------------------------------------------------------- 
 
 #SBATCH --account=coastal
-#SBATCH --job-name=jnsem_fcst
+#SBATCH --job-name=prep_spin
 #SBATCH -q batch
-#SBATCH --time=08:00:00
-#SBATCH --ntasks=720
-##SBATCH --ntasks=11
+#SBATCH --time=00:30:00
+#SBATCH --mem 64000M
+#SBATCH --ntasks=1
 #SBATCH --mail-user=andre.vanderwesthuysen@noaa.gov
 #SBATCH --mail-type=ALL
-#SBATCH --output=jnsem_forecast_spinup.out.log
-#SBATCH --error=jnsem_forecast_spinup.err.log
+#SBATCH --output=prep_spinup.out.log
+#SBATCH --error=prep_spinup.err.log
 
 #source ${ROOTDIR}/modulefiles/hera/ESMF_NUOPC
 source ${ROOTDIR}/modulefiles/envmodules_intel.hera
@@ -33,10 +33,11 @@ export envir="para"
 
 export DEVWCOSS_USER=$(whoami)
 #export COMROOT=${COMROOT:-${NSEMdir}/../com}
+echo $COMROOT
 
 #Dev environment value for $job and $jobid
-export job=pnsem_forecast
-export jobid=pnsem_forecast.$$
+export job=pnsem_prep
+export jobid=pnsem_prep.$$
 
 #Dev environment jlogfile
 #mkdir -p ${COMROOT}/logs/${envir}
@@ -45,19 +46,19 @@ export jobid=pnsem_forecast.$$
 export NWROOT=${NSEMdir}
 
 export RUN_TYPE="tide_spinup"
-${NWROOT}/jobs/J${MODEL}_FORECAST
+${NWROOT}/jobs/J${MODEL}_PREP
 
 #%manual
 ################################################################################
 #TASKSCRIPT DOCUMENTATION BLOCK
-#TASKSCRIPT:     jnsem_forecast
+#TASKSCRIPT:     jnsem_prep
 #LAST MODIFIER:  Andre van der Westhuysen
 #ORGANIZATION:   IMSG at NOAA/NCEP/EMC
 #DATE:           May 2020
 #FULL NAME:      /nsem/jnsem
-#PURPOSE:        To execute the forecast job for ADC-WW3-NWM model
+#PURPOSE:        To execute the job that preps the input files for ADC-WW3-NWM model
 #JOB SCRIPT CALLED: ${NWROOT}/jobs/JNSEM ==>
-#                            ${NWROOT}/scripts/exnsem_forecast.sh.ecf
+#                            ${NWROOT}/scripts/exnsem_prep.sh.ecf
 #################################################################################
 ######################################################################
 # Job specific troubleshooting instructions:
