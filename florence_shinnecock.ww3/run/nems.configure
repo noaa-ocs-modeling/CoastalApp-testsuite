@@ -1,0 +1,23 @@
+#############################################
+####  NEMS Run-Time Configuration File  #####
+#############################################
+
+# EARTH #
+EARTH_component_list: WAV
+EARTH_attributes::
+  Verbosity = high
+::
+
+# WAV #
+WAV_model:                      ww3
+WAV_petlist_bounds:             0 11
+WAV_attributes::
+  Verbosity = high
+::
+
+# Run Sequence #
+runSeq::
+  @3600
+    WAV
+  @
+::

@@ -1,0 +1,1 @@
+../spinup/fort.68.nc

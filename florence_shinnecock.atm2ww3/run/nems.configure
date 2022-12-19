@@ -1,0 +1,32 @@
+#############################################
+####  NEMS Run-Time Configuration File  #####
+#############################################
+
+# EARTH #
+EARTH_component_list: ATM WAV
+EARTH_attributes::
+Verbosity = high
+::
+
+# ATM #
+ATM_model:                      atmesh
+ATM_petlist_bounds:             0 0
+ATM_attributes::
+Verbosity = high
+::
+
+# WAV #
+WAV_model:                      ww3
+WAV_petlist_bounds:             1 11
+WAV_attributes::
+##  Verbosity = high
+::
+
+# Run Sequence #
+runSeq::
+  @18000
+    ATM -> WAV   :remapMethod=redist
+    ATM
+    WAV
+  @
+::

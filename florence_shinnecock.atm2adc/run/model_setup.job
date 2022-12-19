@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --account=coastal
+#SBATCH --job-name=FLSH_atm2adc_SETUP
+#SBATCH --time=00:30:00
+#SBATCH -q batch
+#SBATCH --mem 3000
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
+##SBATCH --mail-user=USER@noaa.gov
+##SBATCH --mail-type=ALL
+#SBATCH --error=FLSH_atm2adc_SETUP.err.log
+#SBATCH --output=FLSH_atm2adc_SETUP.out.log
+
+set -e
+
+source ${mod_loc:+${mod_loc}/}envmodules_intel.hera
+module list
+
+echo "Preparing ADCIRC inputs..."
+srun ${bin_loc:+${bin_loc}/}adcprep --np 11 --partmesh >  adcprep.log
+srun ${bin_loc:+${bin_loc}/}adcprep --np 11 --prepall  >> adcprep.log
