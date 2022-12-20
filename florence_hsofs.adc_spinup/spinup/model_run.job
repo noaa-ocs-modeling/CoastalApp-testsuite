@@ -1,16 +1,15 @@
 #!/bin/bash
 
 #SBATCH --account=coastal
-#SBATCH --job-name=SDSH_pam2ww3_RUN
+#SBATCH --job-name=FLOFS_adc_RUN
 #SBATCH --time=02:30:00
 #SBATCH -q batch
-#SBATCH --mem 3000
-#SBATCH --ntasks=12
+#SBATCH --ntasks=499
 #SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
 ##SBATCH --mail-user=USER@noaa.gov
 ##SBATCH --mail-type=ALL
-#SBATCH --error=SDSH_pam2ww3_RUN.err.log
-#SBATCH --output=SDSH_pam2ww3_RUN.out.log
+#SBATCH --error=FLOFS_adc_RUN.err.log
+#SBATCH --output=FLOFS_adc_RUN.out.log
 
 set -e
 

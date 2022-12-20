@@ -1,0 +1,33 @@
+$
+$ Input file template for WW3_multi with NUOPC support
+$
+1 0 T 1 T T
+$
+'points'
+$
+'inlet' 'CPL:native' 'CPL:native'  'CPL:native' 'no' 'no' 'no' 'no' 'no' 'no'   1  1  0.00 1.00  F
+$ 
+ 20180907 000000 20180914 000000
+$
+ T T
+$
+ 20180907 000000 3600 20180914 000000
+ N
+ WND HS FP DP WLV CUR DPT
+$
+ 20180907 000000 0 20180914 000000
+$
+ 20180907 000000 0 20180914 000000
+$
+ 20180907 000000 129600 20180914 000000
+$
+ 20180907 000000 0 20180914 000000
+$
+ 20180907 12000000 0 20180914 000000
+$
+ 'the_end'  0
+$
+ 'STP'
+$
+$ End of input file
+$

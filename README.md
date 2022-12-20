@@ -1,73 +1,79 @@
-# CoastalApp Tests (Temp repo)
+# CoastalApp-testsuite
 
-## How to compile CoastalApp
+Contacts:
 
-```bash
-#!/bin/bash --login
-# ----------------------------------------------------------- 
-# Shell Used: BASH shell
-# Original Author(s): Saeed Moghimi
-# File Creation Date: 09/17/2022
-# Date Last Modified:
-#
-# Version control: 1.00
-#
-# Support Team:
-#
-# Contributors: 
-#
-# ----------------------------------------------------------- 
-# ------------- Program Description and Details ------------- 
-# ----------------------------------------------------------- 
-#
-# Execute script to perform CoastalApp test runs 
-#
-# ----------------------------------------------------------- 
+Panagiotis.Velissariou@noaa.gov
 
-export ROOTDIR='/scratch2/COASTAL/coastal/save/Saeed.Moghimi/models/NEMS/tests/CoastalApp_test/temp7/CoastalApp'
+Saeed.Moghimi@noaa.gov
 
-############
-# Check out codes
-git clone --recurse-submodules https://github.com/noaa-ocs-modeling/CoastalApp -b develop_build $ROOTDIR
-cd $ROOTDIR
+## Download the CoastalApp-testsuite
 
 
-#git checkout develop_build
-#git submodule sync
-#git submodule update --init --recursive
+**First** download the test suite for CoastalApp using git:
 
+``
+git clone https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
+``
 
-# DDDDDDDDownload parmatis
-#TODO add a error message to perform below if not yet for ww3 compilation
-#TODO or export the vars ...
-#  sh $ROOTDIR/scripts/download_parmetis.sh
-# build on hera
-# ./build.sh --component "ATMESH WW3 ADCIRC WW3DATA PAHM " --plat hera --compiler intel --clean -2  --thirdparty=parmetis
+***Change directory to: ***
+``cd CoastalApp-testsuite``
 
+It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory.
 
+**Second** download the CoastalApp itself:
 
-###OOOOOOOOR pass your own Parmatis
-#Ali's ParMatis using hpc-stack static library not works with ADCIRC for now
-#export METIS_PATH=/scratch2/COASTAL/coastal/save/Ali.Abdolali/hpc-stack/parmetis-4.0.3
+``
+git clone --recurse-submodules https://github.com/noaa-ocs-modeling/CoastalApp -b develop
+``
 
-#Takis similar to SCHISM ParMatis
-export METIS_PATH=/scratch2/COASTAL/coastal/noscrub/shared/Takis/CoastalApp/THIRDPARTY_INSTALL
+The above command will download the CoastalApp codes into CoastalApp-testsuite/CoastalApp
 
-export PARMETISHOME=$METIS_PATH
-./build.sh --component "ATMESH WW3 ADCIRC WW3DATA PAHM " --plat hera --compiler intel --clean -2  #--thirdparty=parmetis
+**Third** download the required data to run the "hsofs" tests cases (the shinnecock test cases are self contained):
 
+``
+wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data.tgz
+``
 
-cd ../coastal_app_test/
-sh run_all.sh
+Extract the data into the comm directory by issuing the command: 
+``tar -zxvf hsofs-data.tgz``
+ 
+ This command will extract the data into the CoastalApp-testsuite/comm directory
 
-```
+## Compile CoastalApp
 
-## Run HSOFS (1.8M node mesh)
+Change directory to CoastalApp-testsuite/CoastalApp:
 
-you need an env variable inside **run_all.sh** as  **$HSOFSDATA**. Try to download the hsofs-data using below script. The data contains the **Florence,2018** ATMesh forcing, WW3 wave boundary and ADCIRC mesh information.
+``cd CoastalApp``
 
-```bash 
- echo "=== download  hsofs-data.tgz ==="
- wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data.tgz 
- tar -zxvf hsofs-data.tgz
-```
+and run the build.sh script to fit your organization's configuration:
+
+`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"``
+
+In the case of ww3, the ParMETIS library is required to build ww3. To use ParMETIS within CoastalApp, you need to first download ParMETIS by running the script: ``scripts/download_parametis.sh``
+
+This command will install the ParMETIS codes into CoastalApp/thirdparty_open.
+
+In this case you need to run the build.sh script as:
+
+`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3" --tp parmetis``
+
+If you want to use a pre-build ParMETIS library in your system, you may run the build script as:
+
+``PARMETISHOME=YOUR_INSTALLED_PARMETIS_LOCATION ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"``
+
+To get the full list of options that the build script accepts with brief explanations, you may run the script as: ``./build.sh --help``
+
+## How to run the CoastalApp tests cases
+
+Change directory into CoastalApp-testsuite.
+
+Edit the file **regtest_list.dat** and uncomment the test cases you want to run. Next run the supplied script **run_all.sh** to run the requested test cases.
+
+If you decided to install CoastalApp and/or the hsofs data in some location outside the CoastalApp-testsuite directory then you need to run the **run_all.sh** as:
+
+``ROOTDIR=CoastalApp_LOCATION COMMDIR=HSOFS_DATA_LOCATION ./run_all.sh``
+
+If your platform is not "hera", you may pass your desired platform name to the script as:
+
+``PLATFORM=YOUR_PLATFORM ./run_all.sh``
+

@@ -4,8 +4,9 @@
 ### Author:        Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
 ### Contributions: Saeed Moghimi <saeed.moghimi@noaa.gov>
 ###
-### Version - 1.0
+### Version - 1.1
 ###
+###   1.1 Tue Dec 20 2022
 ###   1.0 Fri Dec 09 2022
 ###########################################################################
 
@@ -34,32 +35,29 @@ fi
 tmpVAL=${scrDIR:+${scrDIR}/}work
 WORKdir=${WORKdir:-${tmpVAL}}
 
+### The CoastalApp supported platform to use (compiler is intel)
+tmpVAL=hera
+PLATFORM=${PLATFORM:-${tmpVAL}}
+export PLATFORM
+
 ### This is the COMM directory where large input files are stored (e.g., HSOFS data files)
 tmpVAL=${scrDIR:+${scrDIR}/}comm
-COMMDIR=${1:-${COMMDIR}}
 COMMDIR=${COMMDIR:-${tmpVAL}}
-if [ -d "${COMMDIR}" ]; then
-  export COMMDIR="$(cd "${COMMDIR}" && pwd -P)"
-else
-  echo "The COMMDIR = ${COMMDIR} is not found."
-fi
+export COMMDIR
+echo $COMMDIR
 
 ### This is the CoastalApp root directory
-tmpVAL=${scrDIR:+${scrDIR}/}../CoastalApp
+tmpVAL=${scrDIR:+${scrDIR}/}CoastalApp
 ROOTDIR=${1:-${ROOTDIR}}
 ROOTDIR=${ROOTDIR:-${tmpVAL}}
 if [ -d "${ROOTDIR}" ]; then
   export ROOTDIR="$(cd "${ROOTDIR}" && pwd -P)"
 else
-  echo "The ROOTDIR = ${ROOTDIR} is not found."
+  echo "The ROOTDIR = <${ROOTDIR}> is not found."
+  echo "Exiting the script: ${scrNAME} ..."
+  exit 1
 fi
 
-echo "ROOTDIR = ${ROOTDIR}"
-echo "COMMDIR = ${COMMDIR}"
-
-### This is not needed, it will be deleted
-export EXECnsem=${ROOTDIR}/ALLBIN_INSTALL
-exit 1
 ### This is the file that contains all the test cases to run.
 ### If a case is commented out, it is not run
 TESTLIST=regtest_list.dat

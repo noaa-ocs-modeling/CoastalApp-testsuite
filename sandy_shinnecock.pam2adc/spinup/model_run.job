@@ -14,7 +14,7 @@
 
 set -e
 
-source ${mod_loc:+${mod_loc}/}envmodules_intel.hera
+source ${mod_loc:+${mod_loc}/}envmodules_intel.${PLATFORM}
 module list
 
 srun ${bin_loc:+${bin_loc}/}NEMS.x

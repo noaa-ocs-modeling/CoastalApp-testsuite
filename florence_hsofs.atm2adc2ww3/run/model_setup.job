@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --account=coastal
-#SBATCH --job-name=FLSH_atm2adc2ww3_SETUP
+#SBATCH --job-name=FLOFS_atm2adc2ww3_SETUP
 #SBATCH --time=01:00:00
 #SBATCH -q batch
 #SBATCH --mem 3000
@@ -9,8 +9,8 @@
 #SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
 ##SBATCH --mail-user=USER@noaa.gov
 ##SBATCH --mail-type=ALL
-#SBATCH --output=FLSH_atm2adc2ww3_SETUP.out.log
-#SBATCH --error=FLSH_atm2adc2ww3_SETUP.err.log
+#SBATCH --error=FLOFS_atm2adc2ww3_SETUP.err.log
+#SBATCH --output=FLOFS_atm2adc2ww3_SETUP.out.log
 
 set -e
 
@@ -19,8 +19,8 @@ module list
 
 # ADCIRC
 echo "Preparing ADCIRC inputs..."
-srun ${bin_loc:+${bin_loc}/}adcprep --np 5 --partmesh
-srun ${bin_loc:+${bin_loc}/}adcprep --np 5 --prepall
+srun ${bin_loc:+${bin_loc}/}adcprep --np 499 --partmesh
+srun ${bin_loc:+${bin_loc}/}adcprep --np 499 --prepall
 
 # WW3
 echo "Preparing WW3 inputs..."
