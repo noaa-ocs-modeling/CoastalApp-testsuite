@@ -31,7 +31,7 @@ The above command will download the CoastalApp codes into CoastalApp-testsuite/C
 **Third** download the required data to run the "hsofs" tests cases (the shinnecock test cases are self contained):
 
 ``
-wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data.tgz
+wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
 ``
 
 Extract the data into the comm directory by issuing the command: 
