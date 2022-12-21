@@ -16,4 +16,4 @@ set -e
 source ${mod_loc:+${mod_loc}/}envmodules_intel.${PLATFORM}
 module list
 
-srun ${bin_loc:+${bin_loc}/}NEMS.x
+srun ${bin_loc:+${bin_loc}/}NEMS.x &> nems_log.out

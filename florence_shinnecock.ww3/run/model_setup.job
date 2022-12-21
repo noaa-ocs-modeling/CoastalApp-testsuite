@@ -25,3 +25,7 @@ cp -fp mod_def.ww3 mod_def.points
 # It generates nest.ww3
 srun ${bin_loc:+${bin_loc}/}ww3_bounc > ww3_bounc.out
 mv -f nest.ww3 nest.inlet
+
+#it generates wind.ww3
+srun ${bin_loc:+${bin_loc}/}ww3_prnc > ww3_prnc.out
+mv -f wind.ww3 wind.inlet

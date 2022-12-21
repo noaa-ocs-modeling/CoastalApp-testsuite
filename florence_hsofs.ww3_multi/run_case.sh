@@ -11,39 +11,41 @@ DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 error=0
 if [ -d "${COMMDIR}" ]; then
   pushd ${DIRECTORY}/run >/dev/null 2>&1
-    ##### BEG:: ADCIRC #####
-    ### (A) Mesh data
-    for i in fort.13 fort.14
+
+    ##### BEG:: WW3 #####
+    ### (C) Mesh data
+    for i in HSOFS.msh
     do
-      fname="${COMMDIR}/mesh/${i}"
+      fname="${COMMDIR}/data/ww3/${i}"
       if [ -f ${fname} ]; then
         [ -f ${i} ] && rm -f ${i}
         ln -sf ${fname} ${i}
       else
         echo "The required adcirc file ${fname} is not found."
         echo "Exiting this run_case.sh script ..."
-        error=2
+        error=4
         break
       fi
     done
 
-    ### (B) Spinup data
-    for i in fort.67.nc
+    ### (D) Spectra data
+    for i in ${COMMDIR}/data/ww3/ww3.T1.3*2018_spec.nc
     do
-      fname="${COMMDIR}/data/adc/${i}"
+      fname="${i}"
+      i="$( basename ${fname} )"
       if [ -f ${fname} ]; then
         [ -f ${i} ] && rm -f ${i}
         ln -sf ${fname} ${i}
       else
         echo "The required adcirc file ${fname} is not found."
         echo "Exiting this run_case.sh script ..."
-        error=3
+        error=5
         break
       fi
     done
-    ##### END:: ADCIRC #####
+    ##### END:: WW3 #####
 
-    ### (C) Atmospheric data
+    ### (E) Atmospheric data
     for i in Florence_HWRF_HRRR_HSOFS.nc
     do
       fname="${COMMDIR}/data/atm/${i}"

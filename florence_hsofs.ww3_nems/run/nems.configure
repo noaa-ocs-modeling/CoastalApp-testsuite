@@ -3,30 +3,21 @@
 #############################################
 
 # EARTH #
-EARTH_component_list: ATM WAV
+EARTH_component_list: WAV
 EARTH_attributes::
-Verbosity = high
-::
-
-# ATM #
-ATM_model:                      atmesh
-ATM_petlist_bounds:             0 0
-ATM_attributes::
-Verbosity = high
+  Verbosity = high
 ::
 
 # WAV #
 WAV_model:                      ww3
-WAV_petlist_bounds:             1 11
+WAV_petlist_bounds:             0 179
 WAV_attributes::
-##  Verbosity = high
+  Verbosity = high
 ::
 
 # Run Sequence #
 runSeq::
   @3600
-    ATM -> WAV   :remapMethod=redist
-    ATM
     WAV
   @
 ::

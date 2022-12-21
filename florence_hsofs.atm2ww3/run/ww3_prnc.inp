@@ -47,7 +47,7 @@ $   19680606 053000
 $
 $ Define data files -------------------------------------------------- $
 $ The input line identifies the filename using for the forcing field.
-'wind_atm_fin_ch_time_vec.nc'
+'Florence_HWRF_HRRR_HSOFS.nc'
 $fort.63.nc
 $fort.64.nc
 $

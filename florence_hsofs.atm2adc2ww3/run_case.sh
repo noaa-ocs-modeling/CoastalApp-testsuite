@@ -82,7 +82,7 @@ if [ -d "${COMMDIR}" ]; then
       fname="${COMMDIR}/data/atm/${i}"
       if [ -f ${fname} ]; then
         [ -f ${i} ] && rm -f ${i}
-        ln -sf ${fname} atm_forcing.nc
+        ln -sf ${fname} ${i}
       else
         echo "The required atmospheric forcing file ${fname} is not found."
         echo "Exiting this run_case.sh script ..."
