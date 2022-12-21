@@ -4,7 +4,7 @@
 #SBATCH --job-name=FLOFS_atm2adc2ww3_SETUP
 #SBATCH --time=01:00:00
 #SBATCH -q batch
-#SBATCH --mem=10000
+#SBATCH --mem=0
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
 ##SBATCH --mail-user=USER@noaa.gov
