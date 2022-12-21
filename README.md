@@ -35,7 +35,7 @@ wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
 ``
 
 Extract the data into the comm directory by issuing the command: 
-``tar -zxvf hsofs-data.tgz``
+``tar -zxvf hsofs-data-v2.tgz``
  
  This command will extract the data into the CoastalApp-testsuite/comm directory
 
@@ -47,7 +47,7 @@ Change directory to CoastalApp-testsuite/CoastalApp:
 
 and run the build.sh script to fit your organization's configuration:
 
-`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"``
+`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"  -y``
 
 In the case of ww3, the ParMETIS library is required to build ww3. To use ParMETIS within CoastalApp, you need to first download ParMETIS by running the script: ``scripts/download_parametis.sh``
 
@@ -55,11 +55,11 @@ This command will install the ParMETIS codes into CoastalApp/thirdparty_open.
 
 In this case you need to run the build.sh script as:
 
-`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3" --tp parmetis``
+`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3" --tp parmetis  -y``
 
 If you want to use a pre-build ParMETIS library in your system, you may run the build script as:
 
-``PARMETISHOME=YOUR_INSTALLED_PARMETIS_LOCATION ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"``
+``PARMETISHOME=YOUR_INSTALLED_PARMETIS_LOCATION ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"  -y``
 
 To get the full list of options that the build script accepts with brief explanations, you may run the script as: ``./build.sh --help``
 
