@@ -18,7 +18,7 @@ git clone https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
 ***Change directory to:***
 ``cd CoastalApp-testsuite``
 
-It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory.
+**NOTE:** *It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory.*
 
 **Second** download the CoastalApp itself:
 
