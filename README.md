@@ -15,7 +15,7 @@ Saeed.Moghimi@noaa.gov
 git clone https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
 ``
 
-***Change directory to: ***
+***Change directory to:***
 ``cd CoastalApp-testsuite``
 
 It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory.
@@ -73,7 +73,9 @@ If you decided to install CoastalApp and/or the hsofs data in some location outs
 
 ``ROOTDIR=CoastalApp_LOCATION COMMDIR=HSOFS_DATA_LOCATION ./run_all.sh``
 
-If your platform is not "hera", you may pass your desired platform name to the script as:
+If your platform is not "hera", you may also pass your desired platform name to the script as:
 
 ``PLATFORM=YOUR_PLATFORM ./run_all.sh``
 
+**NOTE:** The interface to the script "run_all.sh" it is most likely to be changed to include more commandline options to enhance the script's usage.
+Please stay tuned ...
