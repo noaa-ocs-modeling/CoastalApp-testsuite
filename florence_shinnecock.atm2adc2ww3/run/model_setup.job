@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#SBATCH --account=coastal
+#SBATCH --job-name=FLSH_atm2adc2ww3_SETUP
+#SBATCH --time=01:00:00
+#SBATCH -q batch
+#SBATCH --mem 3000
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
+##SBATCH --mail-user=USER@noaa.gov
+##SBATCH --mail-type=ALL
+#SBATCH --output=FLSH_atm2adc2ww3_SETUP.out.log
+#SBATCH --error=FLSH_atm2adc2ww3_SETUP.err.log
+
+set -e
+
+source ${mod_loc:+${mod_loc}/}envmodules_intel.${PLATFORM}
+module list
+
+# ADCIRC
+echo "Preparing ADCIRC inputs..."
+srun ${bin_loc:+${bin_loc}/}adcprep --np 5 --partmesh
+srun ${bin_loc:+${bin_loc}/}adcprep --np 5 --prepall
+
+# WW3
+echo "Preparing WW3 inputs..."
+${bin_loc:+${bin_loc}/}ww3_grid ww3_grid.inp > ww3_grid.out
+cp -p mod_def.ww3 mod_def.inlet
+cp -p mod_def.ww3 mod_def.points
+
+# It generates nest.ww3
+${bin_loc:+${bin_loc}/}ww3_bounc  > ww3_bounc.out
+mv nest.ww3 nest.inlet

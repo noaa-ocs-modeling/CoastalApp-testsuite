@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --account=coastal
+#SBATCH --job-name=FLOFS_atm2adc_RUN
+#SBATCH --time=07:00:00
+#SBATCH -q batch
+#SBATCH --ntasks=500
+#SBATCH --cpus-per-task=1   # Number of cores per MPI rank (for hyperthreading)
+##SBATCH --mail-user=USER@noaa.gov
+##SBATCH --mail-type=ALL
+#SBATCH --error=FLOFS_atm2adc_RUN.err.log
+#SBATCH --output=FLOFS_atm2adc_RUN.out.log
+
+set -e
+
+source ${mod_loc:+${mod_loc}/}envmodules_intel.${PLATFORM}
+module list
+
+srun ${bin_loc:+${bin_loc}/}NEMS.x &> nems_log.out
