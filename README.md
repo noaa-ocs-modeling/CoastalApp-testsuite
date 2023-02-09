@@ -1,67 +1,62 @@
 # CoastalApp-testsuite
 
-Contacts:
+### Contacts:
 
-Panagiotis.Velissariou@noaa.gov
+ * [Panagiotis.Velissariou@noaa.gov](mailto:Panagiotis.Velissariou@noaa.gov)
+ * [Saeed.Moghimi@noaa.gov](mailto:Saeed.Moghimi@noaa.gov)
 
-Saeed.Moghimi@noaa.gov
+## Introduction
 
-## Download the CoastalApp-testsuite
+***CoastalApp-testsuite*** contains comprehensive tests for the different modeling
+components implemented in [CoastalApp](https://github.com/noaa-ocs-modeling/CoastalApp). The test suite is used to run automated tests for the model and data components after an update in *CoastalApp*. There are two set of tests: (a) small scale tests that require very limited compute resources (e.g., the Shinnecock inlet cases) and (b) large scale tests that require extensive compute resources that can be run on a Cluster/HPC environment (e.g., the HSOFS cases). In any case, to run any of these tests the user is responsible to download and compile *CoastalApp*.
 
 
-**First** download the test suite for CoastalApp using git:
+## Downloading the *CoastalApp-testsuite*
 
-``
-git clone https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
-``
+*CoastalApp-testsuite* is hosted in NOAA's Office of Coast Survey github modeling repository: [https://github.com/noaa-ocs-modeling](https://github.com/noaa-ocs-modeling) along with other applications and models. The source code of *CoastalApp* is publicly available from the GitHub repository:
+  <a href="https://github.com/noaa-ocs-modeling/CoastalApp-testsuite"
+     TARGET="_BLANK" REL="NOREFERRER">https://github.com/noaa-ocs-modeling/CoastalApp-testsuite</a>.
 
-***Change directory to:***
-``cd CoastalApp-testsuite``
+This application can be downloaded using one of the following methods:
 
-**NOTE:** *It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory.*
+***(1) Clone CoastalApp-testsuite from GitHub using the command:***
 
-**Second** download the CoastalApp itself:
+        git clone --recurse-submodules  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
 
-``
-git clone --recurse-submodules https://github.com/noaa-ocs-modeling/CoastalApp -b develop
-``
+The source will be downloaded into the target directory CoastalApp-testsuite.
 
-The above command will download the CoastalApp codes into CoastalApp-testsuite/CoastalApp
+***(2) Download the CoastalApp-testsuite archive using the command:***
 
-**Third** download the required data to run the "hsofs" tests cases (the shinnecock test cases are self contained):
+        wget https://github.com/noaa-ocs-modeling/CoastalApp-testsuite/archive/refs/heads/main.zip
 
-``
-wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
-``
+and extract the sources in the CoastalApp-testsuite directory by issuing the following commands:
 
-Extract the data into the comm directory by issuing the command: 
-``tar -zxvf hsofs-data-v2.tgz``
+        unzip -o main.zip  (the data will be extracted into the CoastalApp-testsuite-main directory)
+
+        mv CoastalApp-testsuite-main CoastalApp-testsuite  (move the extracted files to the CoastalApp-testsuite directory)
+
+**NOTE:** *It is assumed that all subsequent operations take place inside the CoastalApp-testsuite directory* (``cd CoastalApp-testsuite``).
+
+
+## Downloading and Compiling *CoastalApp*
+
+If the application is not already downloaded and/or compiled, you may refer to *CoastalApp's* [README.md](https://github.com/noaa-ocs-modeling/CoastalApp#readme) file for detailed instructions on how to download and compile *CoastalApp*.
+While, the location of the *CoastalApp* is a user's preference, it is suggested to
+download the application into the CoastalApp-testsuite directory where the top level
+"run" script can find CoastalApp.
+
+## Downloading Required Data (Optional)
+
+To run the large scale tests ("hsofs" cases) download the required data to run the tests (all shinnecock test cases are self contained) using the commands:
+
+        cd CoastalApp-testsuite
+        wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
+
+and extract the data into the "comm" directory by issuing the command: 
+
+        tar -zxvf hsofs-data-v2.tgz
  
- This command will extract the data into the CoastalApp-testsuite/comm directory
-
-## Compile CoastalApp
-
-Change directory to CoastalApp-testsuite/CoastalApp:
-
-``cd CoastalApp``
-
-and run the build.sh script to fit your organization's configuration:
-
-`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"  -y``
-
-In the case of ww3, the ParMETIS library is required to build ww3. To use ParMETIS within CoastalApp, you need to first download ParMETIS by running the script: ``scripts/download_parametis.sh``
-
-This command will install the ParMETIS codes into CoastalApp/thirdparty_open.
-
-In this case you need to run the build.sh script as:
-
-`` ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3" --tp parmetis  -y``
-
-If you want to use a pre-build ParMETIS library in your system, you may run the build script as:
-
-``PARMETISHOME=YOUR_INSTALLED_PARMETIS_LOCATION ./build.sh --compiler intel --platform hera --component "atmesh pahm adcirc ww3"  -y``
-
-To get the full list of options that the build script accepts with brief explanations, you may run the script as: ``./build.sh --help``
+ This command will extract the data into the CoastalApp-testsuite/comm directory.
 
 ## How to run the CoastalApp tests cases
 
