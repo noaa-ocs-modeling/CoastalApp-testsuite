@@ -8,7 +8,7 @@
 ## Introduction
 
 ***CoastalApp-testsuite*** contains comprehensive tests for the different modeling
-components implemented in [CoastalApp](https://github.com/noaa-ocs-modeling/CoastalApp). The test suite is used to run automated tests for the model and data components after an update in *CoastalApp*. There are two set of tests: (a) small scale tests that require very limited compute resources (e.g., the Shinnecock inlet cases) and (b) large scale tests that require extensive compute resources that can be run on a Cluster/HPC environment (e.g., the HSOFS cases). In any case, to run any of these tests the user is responsible to download and compile *CoastalApp*.
+components implemented in [CoastalApp](https://github.com/noaa-ocs-modeling/CoastalApp). The test suite is used to run automated tests for the model and data components after an update in *CoastalApp*. There are two set of tests: (a) small scale tests that require very limited compute resources (e.g., the Shinnecock inlet cases) and (b) large scale tests that require extensive compute resources that can be run on a Cluster/HPC environment (e.g., the HSOFS cases). In any case, to run any of these tests the user is responsible to download and compile *CoastalApp* first.
 
 
 ## Downloading the *CoastalApp-testsuite*
