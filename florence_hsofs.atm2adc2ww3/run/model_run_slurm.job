@@ -66,7 +66,8 @@
 #SBATCH -t 08:00:00
 #SBATCH -p ${BATCH_QUEUE:-batch}
 #SBATCH -n 1000
-#SBATCH -c 50
+##SBATCH -c 1
+#SBATCH -N 50
 #SBATCH -e FLOFS_atm2adc2ww3_RUN.err.log
 #SBATCH -o FLOFS_atm2adc2ww3_RUN.out.log
 ##SBATCH --mem=3000

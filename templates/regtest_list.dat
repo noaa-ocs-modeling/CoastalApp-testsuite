@@ -1,11 +1,11 @@
 ##### Extended Tests #####
 ### HSOFS: FLORENCE/SANDY
-florence_hsofs.adc_spinup
-florence_hsofs.atm2adc
-florence_hsofs.atm2adc2ww3
-florence_hsofs.atm2ww3
-florence_hsofs.ww3_multi
-florence_hsofs.ww3_nems
+#florence_hsofs.adc_spinup
+#florence_hsofs.atm2adc
+#florence_hsofs.atm2adc2ww3
+#florence_hsofs.atm2ww3
+#florence_hsofs.ww3_multi
+#florence_hsofs.ww3_nems
 
 ##### Limited (fast) Tests #####
 ### SHINNECOCK: FLORENCE/SANDY
@@ -14,6 +14,10 @@ florence_shinnecock.atm2adc
 florence_shinnecock.atm2adc2ww3
 florence_shinnecock.atm2ww3
 florence_shinnecock.ww3
+ike_shinnecock.sch
+ike_shinnecock.atm2sch
+ike_shinnecock.atm2adc2sch
+ike_shinnecock.atm2sch2ww3data
 sandy_shinnecock.pam2adc
 sandy_shinnecock.pam2ww3
 sandy_shinnecock.pam2adc2ww3

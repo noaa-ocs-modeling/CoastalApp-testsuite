@@ -1,0 +1,21 @@
+# `nems.configure` generated with NEMSpy unknown
+# EARTH #
+EARTH_component_list: OCN
+EARTH_attributes::
+  Verbosity = max
+::
+
+# OCN #
+OCN_model:                      schism
+OCN_petlist_bounds:             0 3
+OCN_attributes::
+  Verbosity = max
+  DumpFields = true
+::
+
+# Run Sequence #
+runSeq::
+  @3600
+    OCN
+  @
+::

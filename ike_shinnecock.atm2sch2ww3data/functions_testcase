@@ -1,0 +1,187 @@
+#!/usr/bin/env bash-*-Shell-script-functions*-
+
+###########################################################################
+## Author:  Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
+##
+## Version: 1.0
+##
+## Version - 1.0 Fri Feb 10 2023
+###########################################################################
+
+
+model_run()
+{
+  local use_dir use_batch
+  local sim_type setup_jobid jobid
+
+  sim_type=
+  setup_jobid=
+  jobid=
+
+
+  sim_type="$( echo "${1}" | tr '[:upper:]' '[:lower:]' )"
+  case "${sim_type}" in
+    "spinup") ;;
+    "run") ;;
+    *)
+      echo "ERROR :: In model_run ${MY_NAME:+(${MY_NAME})}"
+      echo "         The simulation type should be one of: [spinup, run]."
+      echo "         The simulation type <${sim_type}> is not supported."
+      echo "Exiting ..."
+      echo -n
+      exit 1
+      ;;
+  esac
+
+
+  use_dir=${MY_DIR:+${MY_DIR}/}${sim_type}
+  if [ ! -d ${use_dir} ]; then
+    echo "ERROR :: In model_run ${MY_NAME:+(${MY_NAME})}"
+    echo "         The directory <${use_dir}> is not found for this test case."
+    echo "         Please check the configuration of the test case."
+    echo "Exiting ..."
+    echo -n
+    exit 1
+  fi
+
+
+  use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
+  case "${use_batch}" in
+    "SLURM")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+        if [ -e model_setup_slurm.job ]; then
+          setup_jobid="$(sbatch model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+          jobid="$(sbatch --dependency=afterok:${setup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        else
+          jobid="$(sbatch model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        fi
+      popd >/dev/null 2>&1
+
+      ### display queued jobs with dependencies
+      squeue -u ${USER} -o "%.8i %3C %4D %16E %j" --sort i
+      ;;
+    "PBS")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+        if [ -e model_setup_slurm.job ]; then
+          setup_jobid="$(qsub model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+          jobid="$(qsub -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        else
+          jobid="$(qsub model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        fi
+      popd >/dev/null 2>&1
+
+      # display queued jobs with dependencies
+      qstat -u ${USER} -i
+      ;;
+    "NONE")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+      popd >/dev/null 2>&1
+      ;;
+    *)
+      echo "ERROR :: In model_run ${MY_NAME:+(${MY_NAME})}"
+      echo "         The batch system to use is not defined."
+      echo "         It should be one of "SLURM, PBS", set the environment variable:"
+      echo "         BATCH_SYSTEM=[SLURM, PBS, NONE] before running this script."
+      echo "Exiting ..."
+      echo -n
+      exit 1
+      ;;
+  esac
+
+  echo -n ${jobid}
+}
+
+
+model_spinup_run()
+{
+  local use_dir use_batch
+  local spinup_jobid jobid
+
+  spinup_jobid=
+  jobid=
+
+  use_dir=${MY_DIR:+${MY_DIR}/}run
+  if [ ! -d ${use_dir} ]; then
+    echo "ERROR :: In model_spinup_run ${MY_NAME:+(${MY_NAME})}"
+    echo "         The directory <${use_dir}> is not found for this test case."
+    echo "         Please check the configuration of the test case."
+    echo "Exiting ..."
+    echo -n
+    exit 1
+  fi
+
+
+  spinup_jobid=$( model_run spinup )
+  if [ -z "${spinup_jobid}" ]; then
+    echo "ERROR :: In model_spinup_run ${MY_NAME:+(${MY_NAME})}"
+    echo "         This test case requires a spinup simulation first."
+    echo "         The spinup_jobid=<${spinup_jobid}> indicates that the model spinup were not run."
+    echo "Exiting ..."
+    echo -n
+    exit 1
+  fi
+
+
+  use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
+  case "${use_batch}" in
+    "SLURM")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+        if [ -e model_setup_slurm.job ]; then
+          setup_jobid="$(sbatch model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+          jobid="$(sbatch --dependency=afterok:${setup_jobid}:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        else
+          jobid="$(sbatch --dependency=afterok:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        fi
+      popd >/dev/null 2>&1
+
+      ### display queued jobs with dependencies
+      squeue -u ${USER} -o "%.8i %3C %4D %16E %j" --sort i
+      ;;
+    "PBS")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+        if [ -e model_setup_slurm.job ]; then
+          setup_jobid="$(qsub model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+          jobid="$(qsub -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        else
+          jobid="$(qsub -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+            jobid=$(echo "${jobid}" | awk '{print $NF}')
+        fi
+      popd >/dev/null 2>&1
+
+      # display queued jobs with dependencies
+      qstat -u ${USER} -i
+      ;;
+    "NONE")
+      ### run model simulation (spinup or run)
+      pushd ${use_dir} >/dev/null 2>&1
+      popd >/dev/null 2>&1
+      ;;
+    *)
+      echo "ERROR :: In model_spinup_run ${MY_NAME:+(${MY_NAME})}"
+      echo "         The batch system to use is not defined."
+      echo "         It should be one of "SLURM, PBS", set the environment variable:"
+      echo "         BATCH_SYSTEM=[SLURM, PBS, NONE] before running this script."
+      echo "Exiting ..."
+      echo -n
+      exit 1
+      ;;
+  esac
+
+  echo -n ${jobid}
+}

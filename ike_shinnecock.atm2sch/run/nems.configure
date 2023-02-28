@@ -1,0 +1,32 @@
+# `nems.configure` generated with NEMSpy unknown
+# EARTH #
+EARTH_component_list: ATM OCN
+#EARTH_component_list: OCN
+EARTH_attributes::
+  Verbosity = max
+::
+
+# ATM #
+ATM_model:                      atmesh
+ATM_petlist_bounds:             0 0
+ATM_attributes::
+  Verbosity = max
+  DumpFields = true
+::
+
+# OCN #
+OCN_model:                      schism
+OCN_petlist_bounds:             1 3
+OCN_attributes::
+  Verbosity = max
+  DumpFields = true
+::
+
+# Run Sequence #
+runSeq::
+  @3600
+    ATM -> OCN   :remapMethod=bilinear:extrapMethod=nearest_stod
+    ATM
+    OCN
+  @
+::
