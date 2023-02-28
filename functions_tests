@@ -233,52 +233,52 @@ UsageTests()
   #---
   echo "  -y|-yes|--y|--yes"
   echo "    Automatically answer yes for all questions."
-  echo "    Default: 0|no (user is required to enter a yes/no response)."
+  echo "    Default: 0|no (user is required to enter a yes/no response)"
   echo
   #---
   echo "  -mod|--mod|-mod_file|--mod_file [=|space] \"module_file\" (OPTIONAL)."
   echo "    The module file to use."
-  echo "    Default: none."
+  echo "    Default: none"
   echo
   #---
   echo "  -bin|--bin|-bin_dir|--bin_dir [=|space] \"bin_directory\" (REQUIRED)."
   echo "    The path to bin_dir where the CoastalApp executables are located."
-  echo "    Default: \"CoastalApp/ALLBIN_INSTALL\"."
+  echo "    Default: CoastalApp/ALLBIN_INSTALL"
   echo
   #---
   echo "  -com|--com|-com_dir|--com_dir [=|space] \"com_directory\" (OPTIONAL)."
-  echo "    The path to com_dir where the extended tests (e.g., *hsofs*) are located."
-  echo "    Default: \"comm\"."
+  echo "    The path to com_dir where the data for the extended tests (e.g., *hsofs*) are located."
+  echo "    Default: comm"
   echo
   #---
   echo "  -work|--work|-work_dir|--work_dir [=|space] \"work_directory\" (OPTIONAL)."
   echo "    The path to work_dir where the tests are to be run."
-  echo "    Default: \"work\"."
+  echo "    Default: work"
   echo
   #---
   echo "  -tests|--tests|-tests_file|--tests_file [=|space] \"tests_list_file\" (OPTIONAL)."
-  echo "    The path to work_dir where the tests are to be run."
-  echo "    Default: \"regtest_list.dat\"."
+  echo "    The path of the  the tests_list_file where all available tests are listed."
+  echo "    Default: regtest_list.dat"
   echo
   #---
   echo "  -batch|--batch|-batch_system|--batch_system [=|space] \"hpc_batch_system\" (REQUIRED)."
   echo "    The cluster batch system (if any) to use (slurm, pbs, none)."
-  echo "    Default: \"slurm\"."
+  echo "    Default: slurm"
   echo
   #---
   echo "  -accnt|--accnt|-batch_account|--batch_account [=|space] \"hpc_batch_account\" (REQUIRED)."
   echo "    The cluster batch/project account to use."
-  echo "    Default: \"coastal\"."
+  echo "    Default: coastal"
   echo
   #---
   echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (REQUIRED)."
   echo "    The cluster batch queue to use."
-  echo "    Default: \"batch\"."
+  echo "    Default: batch"
   echo
   #---
   echo "  -runexe|--runexe|-batch_runexe|--batch_runexe [=|space] \"hpc_batch_runexe\" (REQUIRED)."
   echo "    The cluster batch run executable to use."
-  echo "    Default: \"srun\"."
+  echo "    Default: srun"
   echo
   #---
 

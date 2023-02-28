@@ -1,12 +1,9 @@
-# CoastalApp-testsuite
+![ ](images/coastalapp-testsuite_logo-01.png)
 
 ### Contacts:
 
  * [Panagiotis.Velissariou@noaa.gov](mailto:Panagiotis.Velissariou@noaa.gov)
  * [Saeed.Moghimi@noaa.gov](mailto:Saeed.Moghimi@noaa.gov)
-
-
-***SCHEDULED TO BE UPDATED  -- SCHEDULED TO BE UPDATED***
 
 ## Introduction
 
@@ -24,7 +21,7 @@ This application can be downloaded using one of the following methods:
 
 ***(1) Clone CoastalApp-testsuite from GitHub using the command:***
 
-        git clone --recurse-submodules  https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
+        git clone https://github.com/noaa-ocs-modeling/CoastalApp-testsuite.git
 
 The source will be downloaded into the target directory CoastalApp-testsuite.
 
@@ -50,7 +47,7 @@ download the application into the CoastalApp-testsuite directory where the top l
 
 ## Downloading Required Data (Optional)
 
-To run the large scale tests ("hsofs" cases) download the required data to run the tests (all shinnecock test cases are self contained) using the commands:
+To run the large scale tests (e.g., "hsofs" cases) download the required data to run the tests (all shinnecock test cases are self contained) using the commands:
 
         cd CoastalApp-testsuite
         wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
@@ -61,19 +58,63 @@ and extract the data into the "comm" directory by issuing the command:
  
  This command will extract the data into the CoastalApp-testsuite/comm directory.
 
-## How to run the CoastalApp tests cases
+## How to run the CoastalApp-testsuite test cases
 
-Change directory into CoastalApp-testsuite.
+The run infrastracture in CoastalApp-testsuite utilizes environment module systems
+like [Lmod](https://lmod.readthedocs.io/en/latest/) (installed in most HPC clusters) or 
+[Environment Modules](https://modules.readthedocs.io/en/latest/). The library requirements to run the test cases are the same as those of *CoastalApp* (please refer to the *CoastalApp's* [README.md](https://github.com/noaa-ocs-modeling/CoastalApp#readme) file for a detailed explanation on system requirements).
 
-Edit the file **regtest_list.dat** and uncomment the test cases you want to run. Next run the supplied script **run_all.sh** to run the requested test cases.
 
-If you decided to install CoastalApp and/or the hsofs data in some location outside the CoastalApp-testsuite directory then you need to run the **run_all.sh** as:
+### Run System
 
-``ROOTDIR=CoastalApp_LOCATION COMMDIR=HSOFS_DATA_LOCATION ./run_all.sh``
+To run particular test case(s), CoastalApp-testsuite provides the ***run_all.sh*** script which, accepts many options to allow the user to customize the run environment of the testsuite. Running the script as:
 
-If your platform is not "hera", you may also pass your desired platform name to the script as:
+        run_all.sh --help
 
-``PLATFORM=YOUR_PLATFORM ./run_all.sh``
+will bring up a help screen as shown in Table 1 that explains the use of all available options to the script:
+<a name="table_1"></a>
 
-**NOTE:** The interface to the script "run_all.sh" it is most likely to be changed to include more commandline options to enhance the script's usage.
-Please stay tuned ...
+![ ](images/coastalapp-testsuite-usage.png)
+
+
+### Run Sequence
+
+ 1. Change directory into CoastalApp-testsuite
+ 2. Edit the file **regtest_list.dat** and uncomment the test cases you want to run
+ 3. Edit (or create) an "environment file" (a sample can be found in templates/env_tests) that contains values for the different options used by the run script. The location of this file by setting the environment variable **TESTS_ENV_FILE** to point to the location of the newly created file (if env_tests is in the same location as `run_all.sh` there is no need to set the TESTS_ENV_FILE variable). If most of the option values remain the same between run sequences, it is convenient to have this file in place and only supply a few options to the script **OPTIONAL STEP**
+ 4. Run the `run_all.sh` script to initiate the run sequence for the requested tests
+
+Next are given some examples of how to run the `run_all.sh` script (assuming that CoastalApp has been compiled):
+
+ * **Example 1** Running on NOAA's RDHPCS HPC systems (the default values are designed for hera):
+
+          run_all.sh --mod CoastalApp/modulefiles/envmodules_intel.hera
+
+    This example assumes that CostalApp is contained within CoastalApp-testsuite. In this
+    case, the script will first load the modulefiles/envmodules_intel.hera file and
+    then will present to the user a list of the configured parameters, waiting for a 
+    yes/no answer to continue.
+
+ * **Example 2** CoastalApp is located outside the CoastalApp-testsuite (hera):
+
+          run_all.sh --mod PATH_TO_CoastalApp/modulefiles/envmodules_intel.hera --bin_dir PATH_TO_CoastalApp/ALLBIN_INSTALL
+
+ * **Example 3** Running on TACC HPC systems (CoastalApp inside CoastalApp-testsuite):
+
+          run_all.sh --mod CoastalApp/modulefiles/envmodules_intel.tacc  --accnt nosofs --queue normal --runexe ibrun
+
+ * **Example 4** Running on TACC HPC systems (CoastalApp inside CoastalApp-testsuite):
+
+          run_all.sh --mod CoastalApp/modulefiles/envmodules_intel.tacc  --accnt nosofs --queue normal --runexe ibrun
+
+ * **Example 5** Using the PBS batch system (CoastalApp inside CoastalApp-testsuite):
+
+          run_all.sh --mod CoastalApp/modulefiles/envmodules_intel.plat --batch pbs --accnt my_accnt --queue my_queue --runexe mpirun
+
+ * **Example 6** Using the environment file only (CoastalApp inside CoastalApp-testsuite):
+
+          TESTS_ENV_FILE=PATH_TO_ENV_FILE run_all.sh
+
+    In this case all options to `run_all.sh` are included in the ENV_FILE. If only specific options are to be included in the command line, the script can be run as:
+
+          TESTS_ENV_FILE=PATH_TO_ENV_FILE run_all.sh --runexe mpirun
