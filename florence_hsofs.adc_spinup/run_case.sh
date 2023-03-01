@@ -91,4 +91,4 @@ fi
 ####################
 
 
-spinup_jobid=$( model_run spinup )"
+spinup_jobid="$( model_run spinup )"

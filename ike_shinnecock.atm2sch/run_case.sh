@@ -63,5 +63,5 @@ export BATCH_RUNEXE=${BATCH_RUNEXE:-}
 ##########
 
 
-run_jobid=$( model_run run )"
+run_jobid="$( model_run run )"
 

@@ -63,5 +63,5 @@ export BATCH_RUNEXE=${BATCH_RUNEXE:-}
 ##########
 
 
-spinup_jobid=$( model_run spinup )"
+spinup_jobid="$( model_run spinup )"
 
