@@ -55,7 +55,9 @@
 ##     Account to charge the job, e.g., coastal, ohd.
 ## -p, --partition=<partition_names>
 ##     Request a specific partition for the resource allocation.
-##     Queue to submit job, e.g., batch, debug.
+## -q, --qos=<qos>
+##     Request a quality of service for the job.
+##     QOS to submit job, e.g., batch, debug.
 ## --exclusive
 ##     Run job exclusively, i.e., do not share nodes with other jobs.
 ###########################################################################
@@ -64,7 +66,7 @@
 #SBATCH -A coastal
 #SBATCH -J SDSH_pam2ww3_RUN
 #SBATCH -t 02:30:00
-#SBATCH -p batch
+#SBATCH -q batch
 #SBATCH -n 12
 #SBATCH -c 1
 #SBATCH -e SDSH_pam2ww3_RUN.err.log
