@@ -61,10 +61,10 @@
 ###########################################################################
 
 
-#SBATCH -A ${BATCH_ACCOUNT:-coastal}
+#SBATCH -A coastal
 #SBATCH -J FLOFS_atm2ww3_RUN
 #SBATCH -t 06:30:00
-#SBATCH -p ${BATCH_QUEUE:-batch}
+#SBATCH -p batch
 #SBATCH -n 180
 ##SBATCH -c 1
 #SBATCH -N 15

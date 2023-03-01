@@ -61,10 +61,10 @@
 ###########################################################################
 
 
-#SBATCH -A ${BATCH_ACCOUNT:-coastal}
+#SBATCH -A coastal
 #SBATCH -J FLOFS_adc_RUN
 #SBATCH -t 02:30:00
-#SBATCH -p ${BATCH_QUEUE:-batch}
+#SBATCH -p batch
 #SBATCH -n 499
 #SBATCH -c 1
 #SBATCH -e FLOFS_adc_RUN.err.log

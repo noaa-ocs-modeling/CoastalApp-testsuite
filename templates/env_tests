@@ -78,6 +78,17 @@ BATCH_QUEUE=
 
 
 ##########
+### BATCH_SLURM_OPTS: Additional command line options to pass to the sbatch program (for SLURM batch system only)
+### DEFAULT: none
+BATCH_SLURM_OPTS=
+
+##########
+### Additional command line options to pass to the qsub program (for PBS batch system only)
+### DEFAULT: none
+BATCH_PBS_OPTS=
+
+
+##########
 ### BATCH_RUNEXE: The HPC/BATCH_SYSTEM run executable to use.
 ### This is a cluster platform specific.
 ### REQUIRED

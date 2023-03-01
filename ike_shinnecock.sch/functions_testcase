@@ -13,6 +13,7 @@ model_run()
 {
   local use_dir use_batch
   local sim_type setup_jobid jobid
+  local slurmOPTS pbsOPTS
 
   sim_type=
   setup_jobid=
@@ -45,18 +46,21 @@ model_run()
   fi
 
 
+  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_PARTITION:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
+  pbsOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-q ${BATCH_QUEUE}} ${BATCH_PBS_OPTS:+${BATCH_PBS_OPTS}}"
+
   use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
   case "${use_batch}" in
     "SLURM")
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(sbatch model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(sbatch ${slurmOPTS} model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
-          jobid="$(sbatch --dependency=afterok:${setup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${setup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         else
-          jobid="$(sbatch model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(sbatch ${slurmOPTS} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
@@ -68,12 +72,12 @@ model_run()
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(qsub model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
-          jobid="$(qsub -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         else
-          jobid="$(qsub model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub ${pbsOPTS} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
@@ -105,6 +109,7 @@ model_spinup_run()
 {
   local use_dir use_batch
   local spinup_jobid jobid
+  local slurmOPTS pbsOPTS
 
   spinup_jobid=
   jobid=
@@ -130,6 +135,8 @@ model_spinup_run()
     exit 1
   fi
 
+  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_PARTITION:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
+  pbsOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-q ${BATCH_QUEUE}} ${BATCH_PBS_OPTS:+${BATCH_PBS_OPTS}}"
 
   use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
   case "${use_batch}" in
@@ -137,12 +144,12 @@ model_spinup_run()
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(sbatch model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(sbatch ${slurmOPTS} model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
-          jobid="$(sbatch --dependency=afterok:${setup_jobid}:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${setup_jobid}:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         else
-          jobid="$(sbatch --dependency=afterok:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
@@ -154,12 +161,12 @@ model_spinup_run()
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(qsub model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
-          jobid="$(qsub -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         else
-          jobid="$(qsub -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo "${jobid}" | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1

@@ -38,7 +38,7 @@ ParseArgsTests()
   local all_evars
 
   all_evars="MY_ACCEPT_ALL MY_MOD_FILE MY_BIN_DIR MY_COM_DIR MY_WORK_DIR MY_TESTS_FILE
-             MY_BATCH_SYSTEM MY_BATCH_ACCOUNT MY_BATCH_QUEUE MY_PLATFORM MY_BATCH_RUNEXE"
+             MY_BATCH_SYSTEM MY_BATCH_ACCOUNT MY_BATCH_QUEUE MY_BATCH_SLURM_OPTS MY_BATCH_PBS_OPTS MY_BATCH_RUNEXE"
 
   for ival in ${all_evars}; do unset __${ival}; done
 
@@ -52,13 +52,16 @@ ParseArgsTests()
   __MY_BATCH_SYSTEM=${BATCH_SYSTEM:-slurm}
   __MY_BATCH_ACCOUNT=${BATCH_ACCOUNT:-coastal}
   __MY_BATCH_QUEUE=${BATCH_QUEUE:-batch}
+  __MY_BATCH_SLURM_OPTS=${BATCH_SLURM_OPTS:-}
+  __MY_BATCH_PBS_OPTS=${BATCH_PBS_OPTS:-}
   __MY_BATCH_RUNEXE=${BATCH_RUNEXE:-srun}
 
-             
+
   # -----
   # Process the function options
   opt_all=( accept_all mod mod_file bin bin_dir com com_dir work work_dir tests tests_file
-            batch batch_system accnt batch_account queue batch_queue runexe batch_runexe
+            batch batch_system accnt batch_account queue batch_queue
+            slurm_opts batch_slurm_opts pbs_opts batch_pbs_opts runexe batch_runexe
             h help )
   opt_all=":$( echo "${opt_all[@]/#/-} ${opt_all[@]/#/--}" | sed 's/ /:/g' ):"
 
@@ -171,6 +174,22 @@ ParseArgsTests()
             fi
           fi
         ;;
+      -slurm_opts | --slurm_opts | -batch_slurm_opts | --batch_slurm_opts )
+          checkFuncOpt "--batch_slurm_opts"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_SLURM_OPTS="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -pbs_opts | --pbs_opts | -batch_pbs_opts | --batch_pbs_opts )
+          checkFuncOpt "--batch_pbs_opts"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_PBS_OPTS="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
       -runexe | --runexe | -batch_runexe | --batch_runexe )
           checkFuncOpt "--batch_runexe"
           if [ $? -eq 0 ]; then
@@ -233,52 +252,64 @@ UsageTests()
   #---
   echo "  -y|-yes|--y|--yes"
   echo "    Automatically answer yes for all questions."
-  echo "    Default: 0|no (user is required to enter a yes/no response)"
+  echo "    Default: 0|no (user is required to enter a yes/no response)."
   echo
   #---
-  echo "  -mod|--mod|-mod_file|--mod_file [=|space] \"module_file\" (OPTIONAL)."
+  echo "  -mod|--mod|-mod_file|--mod_file [=|space] \"module_file\" (OPTIONAL)"
   echo "    The module file to use."
-  echo "    Default: none"
+  echo "    Default: none."
   echo
   #---
-  echo "  -bin|--bin|-bin_dir|--bin_dir [=|space] \"bin_directory\" (REQUIRED)."
+  echo "  -bin|--bin|-bin_dir|--bin_dir [=|space] \"bin_directory\" (REQUIRED)"
   echo "    The path to bin_dir where the CoastalApp executables are located."
-  echo "    Default: CoastalApp/ALLBIN_INSTALL"
+  echo "    Default: CoastalApp/ALLBIN_INSTALL."
   echo
   #---
-  echo "  -com|--com|-com_dir|--com_dir [=|space] \"com_directory\" (OPTIONAL)."
+  echo "  -com|--com|-com_dir|--com_dir [=|space] \"com_directory\" (OPTIONAL)"
   echo "    The path to com_dir where the data for the extended tests (e.g., *hsofs*) are located."
-  echo "    Default: comm"
+  echo "    Default: comm."
   echo
   #---
-  echo "  -work|--work|-work_dir|--work_dir [=|space] \"work_directory\" (OPTIONAL)."
+  echo "  -work|--work|-work_dir|--work_dir [=|space] \"work_directory\" (OPTIONAL)"
   echo "    The path to work_dir where the tests are to be run."
-  echo "    Default: work"
+  echo "    Default: work."
   echo
   #---
-  echo "  -tests|--tests|-tests_file|--tests_file [=|space] \"tests_list_file\" (OPTIONAL)."
+  echo "  -tests|--tests|-tests_file|--tests_file [=|space] \"tests_list_file\" (OPTIONAL)"
   echo "    The path of the  the tests_list_file where all available tests are listed."
-  echo "    Default: regtest_list.dat"
+  echo "    Default: regtest_list.dat."
   echo
   #---
-  echo "  -batch|--batch|-batch_system|--batch_system [=|space] \"hpc_batch_system\" (REQUIRED)."
+  echo "  -batch|--batch|-batch_system|--batch_system [=|space] \"hpc_batch_system\" (REQUIRED)"
   echo "    The cluster batch system (if any) to use (slurm, pbs, none)."
-  echo "    Default: slurm"
+  echo "    Default: slurm."
   echo
   #---
-  echo "  -accnt|--accnt|-batch_account|--batch_account [=|space] \"hpc_batch_account\" (REQUIRED)."
+  echo "  -accnt|--accnt|-batch_account|--batch_account [=|space] \"hpc_batch_account\" (REQUIRED)"
   echo "    The cluster batch/project account to use."
-  echo "    Default: coastal"
+  echo "    Default: coastal."
   echo
   #---
-  echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (REQUIRED)."
+  echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (REQUIRED)"
   echo "    The cluster batch queue to use."
-  echo "    Default: batch"
+  echo "    Default: batch."
   echo
   #---
-  echo "  -runexe|--runexe|-batch_runexe|--batch_runexe [=|space] \"hpc_batch_runexe\" (REQUIRED)."
+  echo "  -slurm_opts|--slurm_opts|-batch_slurm_opts|--batch_slurm_opts [=|space] \"hpc_slurm_options\" (OPTIONAL)"
+  echo "    Additional command line options to pass to the \"sbatch\" command (SLURM only)."
+  echo "    Refer to the SLURM/sbatch documentation."
+  echo "    Default: none."
+  echo
+  #---
+  echo "  -pbs_opts|--pbs_opts|-batch_pbs_opts|--batch_pbs_opts [=|space] \"hpc_pbs_options\" (OPTIONAL)"
+  echo "    Additional command line options to pass to the \"qsub\" command (PBS only)."
+  echo "    Refer to the PBS/qsub documentation."
+  echo "    Default: none."
+  echo
+  #---
+  echo "  -runexe|--runexe|-batch_runexe|--batch_runexe [=|space] \"hpc_batch_runexe\" (REQUIRED)"
   echo "    The cluster batch run executable to use."
-  echo "    Default: srun"
+  echo "    Default: srun."
   echo
   #---
 

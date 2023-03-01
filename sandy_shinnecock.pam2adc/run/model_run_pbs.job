@@ -32,17 +32,17 @@
 ## -q MY_QUEUE_SYSTEM (batch, debug)
 ## Place output files in the working directory. The default is home directory
 ## Rerun this jobif it fails
-##PBS -r MY_RERUN_OPTION (y(es)/n(o))
+## -r MY_RERUN_OPTION (y(es)/n(o))
 ## Request a status email when the job begins (b), ends(e) or aborts (a)
 ## The n option requests no email,but you will still get email if the job aborts
 ## -m MY_EMAIL_OPTIONS (n/p)
 ## -M MY_EMAIL_USER(S) (defaults to the submitting user)
 ###########################################################################
 
-#PBS -A ${BATCH_ACCOUNT:-coastal}
+#PBS -A coastal
 #PBS -N SDSH_pam2adc_RUN
 #PBS -l walltime=02:30:00
-#PBS -q ${BATCH_QUEUE:-batch}
+#PBS -q batch
 #PBS -l ppn=12
 #PBS -e SDSH_pam2adc_RUN.err.log
 #PBS -o SDSH_pam2adc_RUN.out.log

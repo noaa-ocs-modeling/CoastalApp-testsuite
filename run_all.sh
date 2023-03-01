@@ -129,6 +129,14 @@ export BATCH_ACCOUNT=${BATCH_ACCOUNT:-coastal}
 ### The default value is "batch".
 export BATCH_QUEUE=${BATCH_QUEUE:-batch}
 
+### This is for the HPC/BATCH_SYSTEM sbatch additional options(SLURM).
+### The default value is "".
+export BATCH_SLURM_OPTS=${BATCH_SLURM_OPTS:-}
+
+### This is for the HPC/BATCH_SYSTEM qsub additional options(PBS).
+### The default value is "".
+export BATCH_PBS_OPTS=${BATCH_PBS_OPTS:-}
+
 ### This is for the HPC/BATCH_SYSTEM run executable to use.
 ### The default value is "srun".
 export BATCH_RUNEXE=${BATCH_RUNEXE:-srun}
@@ -163,6 +171,8 @@ export TESTS_FILE="${MY_TESTS_FILE}"
 export BATCH_SYSTEM="${MY_BATCH_SYSTEM}"
 export BATCH_ACCOUNT="${MY_BATCH_ACCOUNT}"
 export BATCH_QUEUE="${MY_BATCH_QUEUE}"
+export BATCH_SLURM_OPTS="${MY_BATCH_SLURM_OPTS}"
+export BATCH_PBS_OPTS="${MY_BATCH_PBS_OPTS}"
 export BATCH_RUNEXE="${MY_BATCH_RUNEXE}"
 #################################
 
@@ -171,16 +181,18 @@ export BATCH_RUNEXE="${MY_BATCH_RUNEXE}"
 # Get a final user response for the variables
 echo
 echo "The following variables are defined:"
-echo "    ACCEPT_ALL    = ${ACCEPT_ALL}"
-echo "    MOD_FILE      = ${MOD_FILE}"
-echo "    BIN_DIR       = ${BIN_DIR}"
-echo "    COM_DIR       = ${COM_DIR}"
-echo "    WORK_DIR      = ${WORK_DIR}"
-echo "    TESTS_FILE    = ${TESTS_FILE}"
-echo "    BATCH_SYSTEM  = ${BATCH_SYSTEM}"
-echo "    BATCH_ACCOUNT = ${BATCH_ACCOUNT}"
-echo "    BATCH_QUEUE   = ${BATCH_QUEUE}"
-echo "    BATCH_RUNEXE  = ${BATCH_RUNEXE}"
+echo "    ACCEPT_ALL       = ${ACCEPT_ALL}"
+echo "    MOD_FILE         = ${MOD_FILE}"
+echo "    BIN_DIR          = ${BIN_DIR}"
+echo "    COM_DIR          = ${COM_DIR}"
+echo "    WORK_DIR         = ${WORK_DIR}"
+echo "    TESTS_FILE       = ${TESTS_FILE}"
+echo "    BATCH_SYSTEM     = ${BATCH_SYSTEM}"
+echo "    BATCH_ACCOUNT    = ${BATCH_ACCOUNT}"
+echo "    BATCH_QUEUE      = ${BATCH_QUEUE}"
+echo "    BATCH_SLURM_OPTS = ${BATCH_SLURM_OPTS}"
+echo "    BATCH_PBS_OPTS   = ${BATCH_PBS_OPTS}"
+echo "    BATCH_RUNEXE     = ${BATCH_RUNEXE}"
 
 
 if [ "$( getYesNo "${ACCEPT_ALL:-0}" )" = "no" ]; then

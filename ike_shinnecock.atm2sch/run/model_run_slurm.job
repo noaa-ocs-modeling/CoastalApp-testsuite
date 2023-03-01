@@ -61,10 +61,10 @@
 ###########################################################################
 
 
-#SBATCH -A ${BATCH_ACCOUNT:-coastal}
+#SBATCH -A coastal
 #SBATCH -J IKSH_atm2sch_RUN
 #SBATCH -t 02:30:00
-#SBATCH -p ${BATCH_QUEUE:-batch}
+#SBATCH -p batch
 #SBATCH -n 4
 #SBATCH -c 1
 #SBATCH -e IKSH_atm2sch_RUN.err.log
