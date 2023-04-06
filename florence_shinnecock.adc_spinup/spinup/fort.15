@@ -20,8 +20,8 @@
  2.0                                      ! DT - TIME STEP (IN SECONDS)
  0.00                                     ! STATIM - STARTING SIMULATION TIME IN DAYS
  0.00                                     ! REFTIME - REFERENCE TIME (IN DAYS) FOR NODAL FACTORS AND EQUILIBRIUM ARGS
- 12.5                           ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
- 7                                   ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
+ 12.5                                     ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
+ 7                                        ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
  0.35  0.30  0.35                         ! TIME WEIGHTING FACTORS FOR THE GWCE EQUATION
  0.05 12 12 0.02                          ! H0 - MINIMUM CUTOFF DEPTH
  -72.43 40.66                             ! SLAM0,SFEA0 - CENTER OF CPP PROJECTION (NOT USED IF ICS=1, NTIP=0, NCOR=0)
@@ -439,12 +439,12 @@
 -72.8683  40.7383  !  8513825                                      
  0 0.0 0.0 0                              ! NOUTV,TOUTSV,TOUTFV,NSPOOLV:VEL STATION OUTPUT INFO (UNIT 62)
  0                                        ! NSTAV - TOTAL NUMBER OF VELOCITY RECORDING STATIONS
- -5 0.0 1000.0 180                            ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
- -5 0.0 1000.0 180                            ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
+ -5 0.0 100.0 180                         ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
+ -5 0.0 100.0 180                         ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
  0                                        ! NHARF - NUMBER OF FREQENCIES IN HARMONIC ANALYSIS
  0.0 0.0 0 0.0                            ! THAS,THAF,NHAINC,FMV - HARMONIC ANALYSIS PARAMETERS
  0 0 0 0                                  ! NHASE,NHASV,NHAGE,NHAGV - CONTROL HARMONIC ANALYSIS AND OUTPUT TO UNITS 51,52,53,54
- 5 540000.0                           ! NHSTAR,NHSINC - HOT START FILE GENERATION PARAMETERS
+ 5 540000.0                               ! NHSTAR,NHSINC - HOT START FILE GENERATION PARAMETERS
  1 0 1.0E-10 25                           ! ITITER, ISLDIA, CONVCR, ITMAX - ALGEBRAIC SOLUTION PARAMETERS
 adcirc.org netcdf examples project
 UNC CH Institute of Marine Sciences

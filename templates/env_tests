@@ -1,0 +1,100 @@
+############################################################
+# This is a template of environment file "env_tests" that it is
+#   sourced from within the "run_all.sh" script.
+# It is a "bash" style file.
+#
+# Author:  Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
+#
+# Version: 1.0
+#
+# Version - 1.0 Fri Feb 10 2023
+############################################################
+
+
+##########
+### MOD_FILE: Path to the module file to source. If empty, no module file is sourced.
+### OPTIONAL
+### DEFAULT: none
+
+MOD_FILE=
+
+
+##########
+### BIN_DIR: Path to the bin directory where all CoastalApp executables are located.
+### REQUIRED
+### DEFAULT: CoastalApp/ALLBIN_INSTALL
+
+BIN_DIR=
+
+
+##########
+### COM_DIR: Path to the common directory where all test cases data are located.
+### OPTIONAL
+### DEFAULT: comm
+
+COM_DIR=
+
+
+##########
+### WORK_DIR: Path to the work directory where all test cases being run.
+### OPTIONAL
+### DEFAULT: work
+
+WORK_DIR=
+
+##########
+### TESTS_FILE: Path to the file that contains the test cases to run.
+### OPTIONAL
+### DEFAULT: regtest_list.dat
+
+TESTS_FILE=
+
+
+##########
+### BATCH_SYSTEM: The batch system to use when running jobs on a cluster environment.
+### Valid values are: slurm, pbs or, none
+### REQUIRED
+### DEFAULT: slurm
+
+BATCH_SYSTEM=
+
+
+##########
+### BATCH_ACCOUNT: The project account to use for the batch job.
+### This is a cluster platform specific.
+### REQUIRED
+### DEFAULT: coastal
+
+BATCH_ACCOUNT=
+
+
+##########
+### BATCH_QUEUE: The HPC/BATCH_SYSTEM queue to use for the batch job.
+### This is a cluster platform specific.
+### REQUIRED
+### DEFAULT: batch
+
+BATCH_QUEUE=
+
+
+##########
+### BATCH_SLURM_OPTS: Additional command line options to pass to the sbatch program (for SLURM batch system only)
+### DEFAULT: none
+BATCH_SLURM_OPTS=
+
+##########
+### Additional command line options to pass to the qsub program (for PBS batch system only)
+### DEFAULT: none
+BATCH_PBS_OPTS=
+
+
+##########
+### BATCH_RUNEXE: The HPC/BATCH_SYSTEM run executable to use.
+### This is a cluster platform specific.
+### REQUIRED
+### DEFAULT: srun
+### Different HPC platforms and different batch managers use different run executables,
+### for example under "slurm" the run executable is "srun" (in TACC HPC they use "ibrun" which
+### is a wrapper to "srun". Under "pbs" the run executable might be "mpirun/mpiexec". And so on ...
+
+BATCH_RUNEXE=

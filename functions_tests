@@ -1,0 +1,542 @@
+#!/usr/bin/env bash-*-Shell-script-functions*-
+
+###########################################################################
+## Author:  Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
+##
+## Version: 1.0
+##
+## Version - 1.0 Fri Feb 24 2023
+###########################################################################
+
+set +u
+
+##################################################
+### BEG:: MODELLING SYSTEM BUILD FUNCTIONS
+##################################################
+
+###========================================
+### ParseArgsTests()
+###
+### Usage:      ParseArgsTests args
+###
+### Parameters: args = the script options
+###
+### Returns:    0
+###
+### Echoes:     NONE
+###
+### Gets the supplied options to the script.
+###========================================
+ParseArgsTests()
+{
+  local nm_func=$( basename ${BASH_SOURCE[${#BASH_SOURCE[@]}-1]} )
+
+  local opt_all opt_opt opt_arg opt_chk
+
+  local t_VAR
+  local ans0 ans ival intN
+  local all_evars
+
+  all_evars="MY_ACCEPT_ALL MY_MOD_FILE MY_BIN_DIR MY_COM_DIR MY_WORK_DIR MY_TESTS_FILE
+             MY_BATCH_SYSTEM MY_BATCH_ACCOUNT MY_BATCH_QUEUE MY_BATCH_SLURM_OPTS MY_BATCH_PBS_OPTS MY_BATCH_RUNEXE"
+
+  for ival in ${all_evars}; do unset __${ival}; done
+
+  
+  __MY_ACCEPT_ALL=${ACCEPT_ALL:-0}
+  __MY_MOD_FILE=${MOD_FILE:-}
+  __MY_BIN_DIR=${BIN_DIR:-CoastalApp/ALLBIN_INSTALL}
+  __MY_COM_DIR=${COM_DIR:-comm}
+  __MY_WORK_DIR=${WORK_DIR:-work}
+  __MY_TESTS_FILE=${TESTS_FILE:-regtest_list.dat}
+  __MY_BATCH_SYSTEM=${BATCH_SYSTEM:-slurm}
+  __MY_BATCH_ACCOUNT=${BATCH_ACCOUNT:-coastal}
+  __MY_BATCH_QUEUE=${BATCH_QUEUE:-batch}
+  __MY_BATCH_SLURM_OPTS=${BATCH_SLURM_OPTS:-}
+  __MY_BATCH_PBS_OPTS=${BATCH_PBS_OPTS:-}
+  __MY_BATCH_RUNEXE=${BATCH_RUNEXE:-srun}
+
+
+  # -----
+  # Process the function options
+  opt_all=( accept_all mod mod_file bin bin_dir com com_dir work work_dir tests tests_file
+            batch batch_system accnt batch_account queue batch_queue
+            slurm_opts batch_slurm_opts pbs_opts batch_pbs_opts runexe batch_runexe
+            h help )
+  opt_all=":$( echo "${opt_all[@]/#/-} ${opt_all[@]/#/--}" | sed 's/ /:/g' ):"
+
+  unset __OPTION_LIST
+  while test $# -gt 0; do
+    case "${1}" in
+      -[^-]*=* | --[^-]*=* )
+        opt_opt="$( toLOWER "$( echo "${1}" | sed 's/=.*//' )" )"
+        len=$(( ${#opt_opt} + 1 ))
+        opt_arg="$( strTrim "$( echo "${1:${len}}" )" 2 )"
+        [ "$( echo "${opt_all}" | egrep -o ":${opt_arg}:" )" ] && \
+          opt_arg=
+        ;;
+      -[^-]* | --[^-]* )
+        opt_opt="$( toLOWER "${1}" )"
+        opt_chk="$( toLOWER "$( echo "${2}" | sed 's/=.*//' )" )"
+        if [ "$( echo "${opt_all}" | egrep -o ":${opt_chk}:" )" ]; then
+          opt_arg=
+        else
+          opt_arg="$( strTrim "$( echo "${2}" )" )"
+        fi
+        ;;
+      *)
+        opt_opt=
+        opt_arg=
+        ;;
+    esac
+
+    case "${opt_opt}" in
+      -y | --y | -yes | --yes )
+          checkFuncOpt "--yes"
+          if [ $? -eq 0 ]; then
+            __MY_ACCEPT_ALL=1
+            if [ "X${opt_arg}" != "X" ]; then
+              if `isInteger "${opt_arg}"` ; then
+                __MY_ACCEPT_ALL=$( echo "${opt_arg}" )
+                [ ${opt_arg} -le 0 ] && __MY_ACCEPT_ALL=0
+                [ ${opt_arg} -ge 1 ] && __MY_ACCEPT_ALL=1
+              else
+                __MY_ACCEPT_ALL=0
+                [ "$( getYesNo "${opt_arg}" )" = "yes" ] && __MY_ACCEPT_ALL=1
+              fi
+            fi
+          fi
+        ;;
+      -h | -help | --h | --help )
+          UsageTests ${nm_func}
+        ;;
+      -mod | --mod | -mod_file | --mod_file )
+          checkFuncOpt "--mod_file"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_MOD_FILE="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -bin | --bin | -bin_dir | --bin_dir )
+          checkFuncOpt "--bin_dir"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BIN_DIR="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -com | --com | -com_dir | --com_dir )
+          checkFuncOpt "--com_dir"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_COM_DIR="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -work | --work | -work_dir | --work_dir )
+          checkFuncOpt "--work_dir"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_WORK_DIR="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -tests | --tests | -tests_file | --tests_file )
+          checkFuncOpt "--tests_file"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_TESTS_FILE="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -batch | --batch | -batch_system | --batch_system )
+          checkFuncOpt "--batch_system"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_SYSTEM="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -accnt | --accnt | -batch_accnt | --batch_accnt )
+          checkFuncOpt "--batch_accnt"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_ACCOUNT="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -queue | --queue | -batch_queue | --batch_queue )
+          checkFuncOpt "--batch_queue"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_QUEUE="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -slurm_opts | --slurm_opts | -batch_slurm_opts | --batch_slurm_opts )
+          checkFuncOpt "--batch_slurm_opts"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_SLURM_OPTS="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -pbs_opts | --pbs_opts | -batch_pbs_opts | --batch_pbs_opts )
+          checkFuncOpt "--batch_pbs_opts"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_PBS_OPTS="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -runexe | --runexe | -batch_runexe | --batch_runexe )
+          checkFuncOpt "--batch_runexe"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_RUNEXE="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      *) ;; # DEFAULT
+    esac
+    shift
+    opt_opt= 
+    opt_arg=
+  done
+  unset __OPTION_LIST
+  # -----
+
+  # Export the values of all __* variables.
+  for ival in ${all_evars}
+  do
+    ans0="$( eval "echo \${$(echo ${ival}):-}" )"
+    ans="$( eval "echo \${$(echo __${ival}):-}" )"
+    ans=${ans:-${ans0:-}}
+
+    eval "${ival}=\${ans}"
+    export ${ival}
+
+    unset __${ival}
+  done
+
+  return 0
+}
+
+###========================================
+### UsageTests()
+###
+### Usage:      UsageTests
+###
+### Parameters: NONE
+###
+### Returns : Exits on error
+###
+### Exports : NONE
+###
+### Echoes  : NONE
+###
+### UsageTests: Prints all usage options of the build script.
+###========================================
+UsageTests()
+{
+  local nm="$( basename ${0} )"
+
+  echo
+  echo "Usage: \"${nm}\" [{-|--}option1{=|space}[option_value1]] [{-|--}option2{=|space}[option_value2]] ..."
+  echo
+
+  echo "  -h|-help|--h|--help"
+  echo "    Show this help screen."
+  echo
+  #---
+  echo "  -y|-yes|--y|--yes"
+  echo "    Automatically answer yes for all questions."
+  echo "    Default: 0|no (user is required to enter a yes/no response)."
+  echo
+  #---
+  echo "  -mod|--mod|-mod_file|--mod_file [=|space] \"module_file\" (OPTIONAL)"
+  echo "    The module file to use."
+  echo "    Default: none."
+  echo
+  #---
+  echo "  -bin|--bin|-bin_dir|--bin_dir [=|space] \"bin_directory\" (REQUIRED)"
+  echo "    The path to bin_dir where the CoastalApp executables are located."
+  echo "    Default: CoastalApp/ALLBIN_INSTALL."
+  echo
+  #---
+  echo "  -com|--com|-com_dir|--com_dir [=|space] \"com_directory\" (OPTIONAL)"
+  echo "    The path to com_dir where the data for the extended tests (e.g., *hsofs*) are located."
+  echo "    Default: comm."
+  echo
+  #---
+  echo "  -work|--work|-work_dir|--work_dir [=|space] \"work_directory\" (OPTIONAL)"
+  echo "    The path to work_dir where the tests are to be run."
+  echo "    Default: work."
+  echo
+  #---
+  echo "  -tests|--tests|-tests_file|--tests_file [=|space] \"tests_list_file\" (OPTIONAL)"
+  echo "    The path of the  the tests_list_file where all available tests are listed."
+  echo "    Default: regtest_list.dat."
+  echo
+  #---
+  echo "  -batch|--batch|-batch_system|--batch_system [=|space] \"hpc_batch_system\" (REQUIRED)"
+  echo "    The cluster batch system (if any) to use (slurm, pbs, none)."
+  echo "    Default: slurm."
+  echo
+  #---
+  echo "  -accnt|--accnt|-batch_account|--batch_account [=|space] \"hpc_batch_account\" (REQUIRED)"
+  echo "    The cluster batch/project account to use."
+  echo "    Default: coastal."
+  echo
+  #---
+  echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (REQUIRED)"
+  echo "    The cluster batch queue to use."
+  echo "    Default: batch."
+  echo
+  #---
+  echo "  -slurm_opts|--slurm_opts|-batch_slurm_opts|--batch_slurm_opts [=|space] \"hpc_slurm_options\" (OPTIONAL)"
+  echo "    Additional command line options to pass to the \"sbatch\" command (SLURM only)."
+  echo "    Refer to the SLURM/sbatch documentation."
+  echo "    Default: none."
+  echo
+  #---
+  echo "  -pbs_opts|--pbs_opts|-batch_pbs_opts|--batch_pbs_opts [=|space] \"hpc_pbs_options\" (OPTIONAL)"
+  echo "    Additional command line options to pass to the \"qsub\" command (PBS only)."
+  echo "    Refer to the PBS/qsub documentation."
+  echo "    Default: none."
+  echo
+  #---
+  echo "  -runexe|--runexe|-batch_runexe|--batch_runexe [=|space] \"hpc_batch_runexe\" (REQUIRED)"
+  echo "    The cluster batch run executable to use."
+  echo "    Default: srun."
+  echo
+  #---
+
+  exit 0
+}
+
+# -------------------------------------------------------
+# getYesNo()
+# Usage:      getYesNo value
+# Parameters:
+#   value : The input value (the value of a parameter)
+#           The value of a bash parameter that is checked
+#           against TRUE/FALSE. If the value is one of:
+#             ">=1|y|yes|yea|yeah|yep"
+#           then the value of parameter is TRUE (answer = yes).
+#           If the value is one of:
+#             "<=0|n|no|not|nop|nope"
+#           then the value of parameter is FALSE (answer = no).
+#           If the value is empty then the value of parameter
+#           is FALSE (answer = no)
+#
+# Returns : NONE
+#
+# Exports : NONE
+#
+# Echoes  : A "yes" or "no" answer.
+#
+# getYesNo: Checks if a parameter is assigned a TRUE/FALSE value.
+# -------------------------------------------------------
+getYesNo()
+{
+  local param answer
+  
+  param="$( echo "${1}" | tr '[:upper:]' '[:lower:]' )"
+
+  if [ "${param}" -eq "${param}" ] 2>/dev/null
+  then
+    [ ${param} -le 0 ] && param=0
+    [ ${param} -gt 0 ] && param=1
+  fi
+
+  case "${param}" in
+    1|y|yes|yea|yeah|yep) answer="yes" ;;
+     0|n|no|not|nop|nope) answer="no"  ;;
+                       *) answer="no"  ;; # DEFAULT
+  esac
+
+  echo -n ${answer}
+}
+
+# -------------------------------------------------------
+# checkFuncOpt()
+# Usage:      checkFuncOpt opt_name
+# Parameters:
+#   opt_name: The name of the option to a function
+#
+# Returns : Exits on error
+#
+# Exports : __OPTION_LIST
+#
+# Echoes  : NONE
+#
+# checkFuncOpt: Checks if an option to a function is already supplied.
+# -------------------------------------------------------
+checkFuncOpt() {
+  local opt_inp opt
+
+  [ $# -eq 0 ] && return 0
+
+  opt_inp="${1}"
+
+  # Check it's not already in use
+  for opt in ${__OPTION_LIST}
+  do 
+    if [ "${opt_inp}" = "${opt}" ]; then
+      procError "Option name \"${opt_inp}\" is already in use"
+    fi
+  done
+
+  __OPTION_LIST="${__OPTION_LIST} ${opt_inp}"
+  export __OPTION_LIST
+}
+
+###========================================
+### procError()
+### Usage:      procError message
+###             procError "message1" \
+###                       "message2" \
+###                       .          \
+###                       .          \
+###                       .          \
+###                       "messageN"
+### Parameters:
+###   message : The list of messages (strings) to display
+###
+### Returns : 1 (failure) or exits with code 1
+###
+### Exports : NONE
+###
+### Echoes  : On exit displays the supplied message with
+###           the "ERROR" heading.
+###
+### procError: Force exit (code 1) on error and display the error message.
+###========================================
+procError()
+{
+  # These are for the current function (procError)
+  local fnm0="${FUNCNAME[0]}"
+  local snm0="$( basename "${BASH_SOURCE[0]}" )"
+
+  # These are for the calling function(s)
+  local err_str fun_str src_str
+  local fnm1="${FUNCNAME[1]}"
+  local fnm2="${FUNCNAME[2]}"
+  local fnm3="${FUNCNAME[3]}"
+  local fnm4="${FUNCNAME[4]}"
+  local snm1="$( basename "${BASH_SOURCE[1]}" )"
+  local snm2="$( basename "${BASH_SOURCE[2]}" )"
+  local snm3="$( basename "${BASH_SOURCE[3]}" )"
+  local snm4="$( basename "${BASH_SOURCE[4]}" )"
+
+  # proc_str: strings to be displayed (if supplied)
+  # trim_str: trimmed version of proc_str
+  local trim_str proc_str=( "$@" )
+  local -i istr
+
+
+  # Strings that identify the calling functions and sources
+  cfnm="${fnm2:+${fnm2}:}${fnm3:+${fnm3}:}${fnm4:+${fnm4}:}"
+    cfnm="${cfnm:+(${cfnm%:})}"
+  csnm="${snm2:+${snm2}:}${snm3:+${snm3}:}${snm4:+${snm4}:}"
+    csnm="${csnm:+(${csnm%:})}"
+
+  src_str="${snm1}${csnm:+ ${csnm}}"
+  fun_str="${fnm1}${cfnm:+ ${cfnm}}"
+
+  err_str="${fun_str:+${fun_str}: }${src_str:+called from: ${src_str}}"
+  [ -z "${err_str:-}" ] && \
+    err_str="${fnm0:+${fnm0}: }${snm0:+defined in: ${snm0}}"
+
+  # Display everything and then issue the exit command
+  [ -n "${err_str:+1}" ] && echo "ERROR:: ${err_str}"
+  for ((istr = 0; istr < ${#proc_str[@]}; istr++))
+  do
+    trim_str="$( strTrim "${proc_str[${istr}]}" 2)"
+    [ -n "${trim_str:+1}" ] && echo "        ${proc_str[${istr}]}"
+  done
+  echo "        Exiting now ..."
+  echo
+  if [ -n "${PS1:+1}" ]; then
+    return 1
+  else
+    exit 1
+  fi
+}
+
+###========================================
+### strTrim()
+### Usage:      strTrim s1 flag
+### Parameters:
+###     s1 : The input string
+###   flag : Integer
+###          A value that controls the action of strTrim.
+###          If flag is zero or not present, trailing blanks are removed.
+###          Leading blanks are removed if it is equal to 1.
+###          Both are removed if it is equal to 2.
+###          In any other case, trailing blanks are removed.
+###
+### Returns : NONE
+###
+### Exports : NONE
+###
+### Echoes  : s1 with all leading and/or trailing
+###           white spaces removed.
+###
+### strTrim: Removes all leading and/or trailing white spaces
+###          from the input string
+###========================================
+strTrim ()
+{
+  local trimFLG="${2:-0}"
+  local out_str=
+
+  case ${trimFLG} in
+    0) out_str="$(echo "${1}" | sed 's/[[:space:]]*$//')" ;;
+    1) out_str="$(echo "${1}" | sed 's/^[[:space:]]*//')" ;;
+    2) out_str="$(echo "${1}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')" ;;
+    *) out_str="$(echo "${1}" | sed 's/[[:space:]]*$//')" ;;
+  esac
+
+  echo -n ${out_str}
+}
+
+###========================================
+### toUPPER()
+### Usage:      toUPPER string
+### Parameters:
+###   string : The string in to convert
+###
+### Returns : NONE
+###
+### Exports : NONE
+###
+### Echoes  : The input string converted to an all upper case string
+###
+### toUPPER: Converts a string to an all upper case string
+###========================================
+toUPPER()
+{
+  echo "${1}" | tr '[:lower:]' '[:upper:]'
+}
+
+###========================================
+### toLOWER()
+### Usage:      toLOWER string
+### Parameters:
+###   string : The string in to convert
+###
+### Returns : NONE
+###
+### Exports : NONE
+###
+### Echoes  : The input string converted to an all lower case string
+###
+### toLOWER: Converts a string to an all lower case string
+###========================================
+toLOWER()
+{
+  echo "${1}" | tr '[:upper:]' '[:lower:]'
+}
