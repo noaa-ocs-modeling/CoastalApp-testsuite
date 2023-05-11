@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+
+###########################################################################
+## Author:  Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
+##
+## Version: 1.0
+##
+## Version - 1.0 Fri Feb 10 2023
+###########################################################################
+
+
+###########################################################################
+## Can run this slurm script by suppling command line options.
+## Example: qsub [options] this_script [options to this_script]
+#####
+
+##### Options below explained.
+########################################
+## Comments are defined by double hash marks if before the actual PBS directives
+##
+## -S MY_SHELL (full path)
+## -l nodes=N:ppn=M (preferably use the following option)
+## -l nodes=N
+## Specifies maximum wall time (real time, not CPU time)
+## -l walltime=HH:MM:SS
+## -A MY_PROJECT_ACCOUNT (coastal, ohd)
+## -N MY_UNIQUE_JOB_TITLE
+## -o MY_UNIQUE_JOB_LOG_FILENAME
+## -e MY_UNIQUE_JOB_ERROR_FILENAME
+## Sets the name of the queue to submit your job to. The default is the "batch" queue.
+## -q MY_QUEUE_SYSTEM (batch, debug)
+## Place output files in the working directory. The default is home directory
+## Rerun this jobif it fails
+## -r MY_RERUN_OPTION (y(es)/n(o))
+## Request a status email when the job begins (b), ends(e) or aborts (a)
+## The n option requests no email,but you will still get email if the job aborts
+## -m MY_EMAIL_OPTIONS (n/p)
+## -M MY_EMAIL_USER(S) (defaults to the submitting user)
+###########################################################################
+
+#PBS -A coastal
+#PBS -N IKSH_atm2ww3_SETUP
+#PBS -l walltime=00:30:00
+#PBS -q batch
+#PBS -l nodes=1
+#PBS -l ppn=1
+#PBS -e IKSH_atm2ww3_SETUP.err.log
+#PBS -o IKSH_atm2ww3_SETUP.out.log
+##PBS -l mem 3000
+##PBS -M USER@noaa.gov
+##PBS -m abe
+
+set -e
+
+if [ -e "${MOD_FILE}" ]; then
+  source ${MOD_FILE}
+  module list
+else
+  echo "The module file: <${MOD_FILE}> is not found"
+  echo "Will continue without loading any OS defined modules"
+fi
+
+### Preparing WW3
+echo "Preparing WW3 inputs..."
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}ww3_grid ww3_grid.inp > ww3_grid.out
+cp -fp mod_def.ww3 mod_def.inlet
+cp -fp mod_def.ww3 mod_def.points
+
+# It generates nest.ww3
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}ww3_bounc  > ww3_bounc.out
+mv -f nest.ww3 nest.inlet
+

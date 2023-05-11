@@ -3,7 +3,7 @@
  1                                        ! NFOVER - NONFATAL ERROR OVERRIDE OPTION
  1                                        ! NABOUT - ABREVIATED OUTPUT OPTION PARAMETER
  1                                        ! NSCREEN - OUTPUT TO UNIT 6 PARAMETER
- 0                                    ! IHOT - HOT START OPTION PARAMETER
+ 0                                        ! IHOT - HOT START OPTION PARAMETER
  2                                        ! ICS - COORDINATE SYSTEM OPTION PARAMETER
  0                                        ! IM - MODEL RUN TYPE: 0=2DDI, 1=3DL(VS), 2=3DL(DSS)
  2                                        ! NOLIBF - NONLINEAR BOTTOM FRICTION OPTION
@@ -13,15 +13,15 @@
  0                                        ! NWP - VARIABLE BOTTOM FRICTION AND LATERAL VISCOSITY OPTION PARAMETER
  1                                        ! NCOR - VARIABLE CORIOLIS IN SPACE OPTION PARAMETER
  1                                        ! NTIP - TIDAL POTENTIAL OPTION PARAMETER
- 0                                     ! NWS - WIND STRESS AND BAROMETRIC PRESSURE OPTION PARAMETER
+ 0                                        ! NWS - WIND STRESS AND BAROMETRIC PRESSURE OPTION PARAMETER
  1                                        ! NRAMP - RAMP FUNCTION OPTION
  9.81                                     ! G - ACCELERATION DUE TO GRAVITY - DETERMINES UNITS
  0.005                                    ! TAU0 - WEIGHTING FACTOR IN GWCE
  2.0                                      ! DT - TIME STEP (IN SECONDS)
  0.00                                     ! STATIM - STARTING SIMULATION TIME IN DAYS
  0.00                                     ! REFTIME - REFERENCE TIME (IN DAYS) FOR NODAL FACTORS AND EQUILIBRIUM ARGS
- 12.5                           ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
- 7                                   ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
+ 7                                        ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
+ 7                                        ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
  0.35  0.30  0.35                         ! TIME WEIGHTING FACTORS FOR THE GWCE EQUATION
  0.05 12 12 0.02                          ! H0 - MINIMUM CUTOFF DEPTH
  -72.43 40.66                             ! SLAM0,SFEA0 - CENTER OF CPP PROJECTION (NOT USED IF ICS=1, NTIP=0, NCOR=0)
@@ -439,12 +439,12 @@
 -72.8683  40.7383  !  8513825                                      
  0 0.0 0.0 0                              ! NOUTV,TOUTSV,TOUTFV,NSPOOLV:VEL STATION OUTPUT INFO (UNIT 62)
  0                                        ! NSTAV - TOTAL NUMBER OF VELOCITY RECORDING STATIONS
- -5 0.0 1000.0 180                            ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
- -5 0.0 1000.0 180                            ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
+ -5 0.0 1000.0 1800                       ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
+ -5 0.0 1000.0 1800                       ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
  0                                        ! NHARF - NUMBER OF FREQENCIES IN HARMONIC ANALYSIS
  0.0 0.0 0 0.0                            ! THAS,THAF,NHAINC,FMV - HARMONIC ANALYSIS PARAMETERS
  0 0 0 0                                  ! NHASE,NHASV,NHAGE,NHAGV - CONTROL HARMONIC ANALYSIS AND OUTPUT TO UNITS 51,52,53,54
- 5 540000.0                           ! NHSTAR,NHSINC - HOT START FILE GENERATION PARAMETERS
+ 5 540000.0                               ! NHSTAR,NHSINC - HOT START FILE GENERATION PARAMETERS
  1 0 1.0E-10 25                           ! ITITER, ISLDIA, CONVCR, ITMAX - ALGEBRAIC SOLUTION PARAMETERS
 adcirc.org netcdf examples project
 UNC CH Institute of Marine Sciences
@@ -455,4 +455,4 @@ netcdf4 format was used (fully compatible with hdf5)
 adcirc.org
 CF
 moghimis@gmail.com
-2008-08-23 00:00:00 UTC
+2012-10-16 00:00:00 UTC

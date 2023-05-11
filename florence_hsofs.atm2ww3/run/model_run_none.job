@@ -29,4 +29,4 @@ ulimit -c 0
 #export IOBUF_PARAMS='*:size=1M:count=4:vbuffer_count=4096:prefetch=1'
 
 
-${BATCH_RUNEXE:-mpirun} -n 180 ${BIN_DIR:+${BIN_DIR}/}NEMS.x
+${BATCH_RUNEXE:-mpirun} -n 350 ${BIN_DIR:+${BIN_DIR}/}NEMS.x

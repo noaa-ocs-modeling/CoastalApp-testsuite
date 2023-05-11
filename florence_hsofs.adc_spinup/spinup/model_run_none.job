@@ -19,4 +19,4 @@ else
   echo "Will continue without loading any OS defined modules"
 fi
 
-${BATCH_RUNEXE:-mpirun} -n 499 ${BIN_DIR:+${BIN_DIR}/}NEMS.x
+${BATCH_RUNEXE:-mpirun} -n 149 ${BIN_DIR:+${BIN_DIR}/}NEMS.x

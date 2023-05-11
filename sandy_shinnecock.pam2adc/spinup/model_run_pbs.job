@@ -43,6 +43,7 @@
 #PBS -N SDSH_pam2adc_RUN
 #PBS -l walltime=02:30:00
 #PBS -q batch
+#PBS -l nodes=1
 #PBS -l ppn=11
 #PBS -e SDSH_pam2adc_RUN.err.log
 #PBS -o SDSH_pam2adc_RUN.out.log

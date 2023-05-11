@@ -17,7 +17,7 @@ ATM_attributes::
 
 # WAV #
 WAV_model:                      ww3
-WAV_petlist_bounds:             1 178
+WAV_petlist_bounds:             1 349
 WAV_attributes::
   Verbosity = high
 ::

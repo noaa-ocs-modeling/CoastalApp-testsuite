@@ -41,9 +41,9 @@
 
 #PBS -A coastal
 #PBS -N FLOFS_atm2ww3_RUN
-#PBS -l walltime=06:30:00
+#PBS -l walltime=08:00:00
 #PBS -q batch
-#PBS -l ppn=180
+#PBS -l ppn=350
 #PBS -l nodes=15
 #PBS -e FLOFS_atm2ww3_RUN.err.log
 #PBS -o FLOFS_atm2ww3_RUN.out.log

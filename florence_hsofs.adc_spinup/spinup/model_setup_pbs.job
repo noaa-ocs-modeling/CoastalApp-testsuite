@@ -43,6 +43,7 @@
 #PBS -N FLOFS_adc_SETUP
 #PBS -l walltime=01:00:00
 #PBS -q batch
+#PBS -l nodes=1
 #PBS -l ppn=1
 #PBS -e FLOFS_adc_SETUP.err.log
 #PBS -o FLOFS_adc_SETUP.out.log
@@ -60,5 +61,5 @@ else
   echo "Will continue without loading any OS defined modules"
 fi
 
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --partmesh
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --prepall
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --partmesh
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --prepall

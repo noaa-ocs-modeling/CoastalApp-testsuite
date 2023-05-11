@@ -41,10 +41,9 @@
 
 #PBS -A coastal
 #PBS -N FLOFS_ww3_multi_RUN
-#PBS -l walltime=06:30:00
+#PBS -l walltime=08:00:00
 #PBS -q batch
 #PBS -l ppn=180
-#PBS -l nodes=15
 #PBS -e FLOFS_ww3_multi_RUN.err.log
 #PBS -o FLOFS_ww3_multi_RUN.out.log
 ##PBS -l mem 3000
@@ -71,4 +70,4 @@ ulimit -c 0
 #export IOBUF_PARAMS='*:size=1M:count=4:vbuffer_count=4096:prefetch=1'
 
 
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}NEMS.x
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}ww3_multi

@@ -41,10 +41,9 @@
 
 #PBS -A coastal
 #PBS -N FLOFS_ww3_nems_RUN
-#PBS -l walltime=06:30:00
+#PBS -l walltime=08:00:00
 #PBS -q batch
 #PBS -l ppn=180
-#PBS -l nodes=15
 #PBS -e FLOFS_ww3_nems_RUN.err.log
 #PBS -o FLOFS_ww3_nems_RUN.out.log
 ##PBS -l mem 3000

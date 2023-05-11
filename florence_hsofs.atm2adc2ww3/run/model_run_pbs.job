@@ -43,7 +43,7 @@
 #PBS -N FLOFS_atm2adc2ww3_RUN
 #PBS -l walltime=08:00:00
 #PBS -q batch
-#PBS -l ppn=1000
+#PBS -l ppn=500
 #PBS -l nodes=50
 #PBS -e FLOFS_atm2adc2ww3_RUN.err.log
 #PBS -o FLOFS_atm2adc2ww3_RUN.out.log

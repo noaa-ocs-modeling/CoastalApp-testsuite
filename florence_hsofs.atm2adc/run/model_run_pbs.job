@@ -43,7 +43,7 @@
 #PBS -N FLOFS_atm2adc_RUN
 #PBS -l walltime=08:00:00
 #PBS -q batch
-#PBS -l ppn=500
+#PBS -l ppn=150
 #PBS -e FLOFS_atm2adc_RUN.err.log
 #PBS -o FLOFS_atm2adc_RUN.out.log
 ##PBS -l mem 3000

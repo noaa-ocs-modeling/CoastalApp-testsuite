@@ -65,11 +65,10 @@
 
 #SBATCH -A coastal
 #SBATCH -J FLOFS_ww3_multi_RUN
-#SBATCH -t 06:30:00
+#SBATCH -t 08:00:00
 #SBATCH -q batch
 #SBATCH -n 180
 ##SBATCH -c 1
-#SBATCH -N 15
 #SBATCH -e FLOFS_ww3_multi_RUN.err.log
 #SBATCH -o FLOFS_ww3_multi_RUN.out.log
 ##SBATCH --mem=3000
@@ -96,4 +95,4 @@ ulimit -c 0
 #export IOBUF_PARAMS='*:size=1M:count=4:vbuffer_count=4096:prefetch=1'
 
 
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}NEMS.x
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}ww3_multi

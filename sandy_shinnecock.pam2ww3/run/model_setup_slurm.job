@@ -66,6 +66,7 @@
 #SBATCH -J SDSH_pam2ww3_SETUP
 #SBATCH -t 01:00:00
 #SBATCH -q batch
+#SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH -e SDSH_pam2ww3_SETUP.err.log

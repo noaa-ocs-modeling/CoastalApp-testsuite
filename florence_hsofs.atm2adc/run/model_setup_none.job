@@ -19,5 +19,5 @@ else
   echo "Will continue without loading any OS defined modules"
 fi
 
-${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --partmesh
-${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --prepall
+${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --partmesh
+${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --prepall

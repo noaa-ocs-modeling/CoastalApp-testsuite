@@ -10,14 +10,14 @@ EARTH_attributes::
 
 # ATM #
 ATM_model:                      atmesh
-ATM_petlist_bounds:             0 0
+ATM_petlist_bounds:             149 149
 ATM_attributes::
   Verbosity = high
 ::
 
 # OCN #
 OCN_model:                      adcirc
-OCN_petlist_bounds:             1 499
+OCN_petlist_bounds:             0 148
 OCN_attributes::
   Verbosity = high
 ::

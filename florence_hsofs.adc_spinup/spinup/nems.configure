@@ -10,7 +10,7 @@ EARTH_attributes::
 
 # OCN #
 OCN_model:                      adcirc
-OCN_petlist_bounds:             0 498
+OCN_petlist_bounds:             0 148
 OCN_attributes::
   Verbosity = high
 ::

@@ -31,8 +31,8 @@ ulimit -c 0
 
 ### Preparing ADCIRC
 echo "Preparing ADCIRC inputs..."
-${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --partmesh
-${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --prepall
+${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --partmesh
+${BATCH_RUNEXE:-mpirun} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --prepall
 
 ### Preparing WW3
 echo "Preparing WW3 inputs..."

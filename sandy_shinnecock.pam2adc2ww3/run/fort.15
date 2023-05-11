@@ -20,8 +20,8 @@
  2.0                                      ! DT - TIME STEP (IN SECONDS)
  0.00                                     ! STATIM - STARTING SIMULATION TIME IN DAYS
  0.00                                     ! REFTIME - REFERENCE TIME (IN DAYS) FOR NODAL FACTORS AND EQUILIBRIUM ARGS
-900  900                                  ! WTIMINC - meteorological data time increment, RSTIMINC wave forcing increment
- 1.5                                      ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
+3600  3600                                ! WTIMINC - meteorological data time increment, RSTIMINC wave forcing increment
+ 8.5                                      ! RNDAY - TOTAL LENGTH OF SIMULATION (IN DAYS)
  7.0                                      ! DRAMP - DURATION OF RAMP FUNCTION (IN DAYS)
  0.35  0.30  0.35                         ! TIME WEIGHTING FACTORS FOR THE GWCE EQUATION
  0.05 12 12 0.02                          ! H0 - MINIMUM CUTOFF DEPTH
@@ -442,9 +442,9 @@
  0                                        ! NSTAV - TOTAL NUMBER OF VELOCITY RECORDING STATIONS 
  0 0.0 0.0 0                              ! NOUTM,TOUTSM,TOUTFM,NSPOOLM:METEO STATION OUTPUT INFO (UNITS 71/72)
  0                                        ! NSTAM - TOTAL NUMBER OF METEOROLOGICAL RECORDING STATIONS
--5 0.0 1000.0 100                         ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
--5 0.0 1000.0 100                         ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
--5 0.0 1000.0 100                         ! NOUTGW,TOUTSGW,TOUTFGW,NSPOOLGW : GLOBAL WIND OUTPUT INFO
+-5 0.0 1000.0 1800                        ! NOUTGE,TOUTSGE,TOUTFGE,NSPOOLGE : GLOBAL ELEVATION OUTPUT INFO (UNIT 63)
+-5 0.0 1000.0 1800                        ! NOUTGV,TOUTSGV,TOUTFGV,NSPOOLGV : GLOBAL VELOCITY OUTPUT INFO (UNIT 64)
+-5 0.0 1000.0 1800                        ! NOUTGW,TOUTSGW,TOUTFGW,NSPOOLGW : GLOBAL WIND OUTPUT INFO
  0                                        ! NHARF - NUMBER OF FREQENCIES IN HARMONIC ANALYSIS
  0.0 0.0 0 0.0                            ! THAS,THAF,NHAINC,FMV - HARMONIC ANALYSIS PARAMETERS
  0 0 0 0                                  ! NHASE,NHASV,NHAGE,NHAGV - CONTROL HARMONIC ANALYSIS AND OUTPUT TO UNITS 51,52,53,54

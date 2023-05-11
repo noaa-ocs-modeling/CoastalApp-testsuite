@@ -67,6 +67,7 @@
 #SBATCH -J SDSH_pam2adc_RUN
 #SBATCH -t 02:30:00
 #SBATCH -q batch
+#SBATCH -N 1
 #SBATCH -n 12
 #SBATCH -c 1
 #SBATCH -e SDSH_pam2adc_RUN.err.log

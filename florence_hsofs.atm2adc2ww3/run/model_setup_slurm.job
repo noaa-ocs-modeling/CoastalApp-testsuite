@@ -66,6 +66,7 @@
 #SBATCH -J FLOFS_atm2adc2ww3_SETUP
 #SBATCH -t 01:00:00
 #SBATCH -q batch
+#SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH -e FLOFS_atm2adc2ww3_SETUP.err.log
@@ -96,8 +97,8 @@ ulimit -c 0
 
 ### Preparing ADCIRC
 echo "Preparing ADCIRC inputs..."
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --partmesh
-${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 499 --prepall
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --partmesh
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}adcprep --np 149 --prepall
 
 ### Preparing WW3
 echo "Preparing WW3 inputs..."

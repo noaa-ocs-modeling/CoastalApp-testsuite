@@ -66,6 +66,7 @@
 #SBATCH -J IKSH_atm2sch2ww3_SETUP
 #SBATCH -t 01:00:00
 #SBATCH -q batch
+#SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH -e IKSH_atm2sch2ww3_SETUP.err.log

@@ -67,7 +67,7 @@
 #SBATCH -J FLOFS_atm2adc_RUN
 #SBATCH -t 08:00:00
 #SBATCH -q batch
-#SBATCH -n 500
+#SBATCH -n 150
 #SBATCH -c 1
 #SBATCH -e FLOFS_atm2adc_RUN.err.log
 #SBATCH -o FLOFS_atm2adc_RUN.out.log

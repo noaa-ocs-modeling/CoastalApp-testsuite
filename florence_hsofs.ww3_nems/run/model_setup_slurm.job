@@ -66,6 +66,7 @@
 #SBATCH -J FLOFS_ww3_nems_SETUP
 #SBATCH -t 01:00:00
 #SBATCH -q batch
+#SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH -e FLOFS_ww3_nems_SETUP.err.log
