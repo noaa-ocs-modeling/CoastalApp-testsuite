@@ -10,6 +10,18 @@
 ***CoastalApp-testsuite*** contains comprehensive tests for the different modeling
 components implemented in [CoastalApp](https://github.com/noaa-ocs-modeling/CoastalApp). The test suite is used to run automated tests for the model and data components after an update in *CoastalApp*. There are two set of tests: (a) small scale tests that require very limited compute resources (e.g., the Shinnecock inlet cases) and (b) large scale tests that require extensive compute resources that can be run on a Cluster/HPC environment (e.g., the HSOFS cases). In any case, to run any of these tests the user is responsible to download and compile *CoastalApp* first.
 
+***Component name abbreviations used in the testsuite:***
+
+<pre>
+   <B>atm</B>         ATMESH data component
+   <B>pam</B>         PAHM model component
+   <B>adc</B>         ADCIRC model component
+   <B>sch</B>         SCHISM model component
+   <B>fvc</B>         FVCOM model component
+   <B>ww3</B>         WaveWatch III model component
+   <B>ww3data</B>     WW3DATA data component
+</pre>
+
 
 ## Downloading the *CoastalApp-testsuite*
 
@@ -47,14 +59,14 @@ download the application into the CoastalApp-testsuite directory where the top l
 
 ## Downloading Required Data (Optional)
 
-To run the large scale tests (e.g., "hsofs" cases) download the required data to run the tests (all shinnecock test cases are self contained) using the commands:
+To run the large scale tests (e.g., "hsofs" cases) or model cases that require large input data (e.g., FVCOM cases) download the required data to run the tests (all shinnecock test cases are self contained) using the commands:
 
         cd CoastalApp-testsuite
-        wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v2.tgz
+        wget https://tacc-nos-coastalapp-testsuit.s3.amazonaws.com/hsofs-data-v3.tgz
 
 and extract the data into the "comm" directory by issuing the command: 
 
-        tar -zxvf hsofs-data-v2.tgz
+        tar -zxvf hsofs-data-v3.tgz
  
  This command will extract the data into the CoastalApp-testsuite/comm directory.
 
