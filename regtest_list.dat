@@ -1,5 +1,5 @@
 ##### Extended Tests #####
-### HSOFS: FLORENCE
+### HSOFS: ADCIRC/WW3
 #florence_hsofs.adc_spinup
 #florence_hsofs.atm2adc
 #florence_hsofs.atm2adc2ww3
@@ -8,12 +8,12 @@
 #florence_hsofs.ww3_nems
 
 ##### Limited (fast) Tests #####
-### SHINNECOCK: IKE/SANDY
-ike_shinnecock.adc_spinup
-ike_shinnecock.atm2adc
-ike_shinnecock.atm2adc2ww3
-ike_shinnecock.atm2ww3
-ike_shinnecock.ww3
+### SHINNECOCK: PAHM/ADCIRC/SCHISM/WW3
+#ike_shinnecock.adc_spinup
+#ike_shinnecock.atm2adc
+#ike_shinnecock.atm2adc2ww3
+#ike_shinnecock.atm2ww3
+#ike_shinnecock.ww3
 #ike_shinnecock.sch
 #ike_shinnecock.atm2sch
 #ike_shinnecock.atm2sch2ww3
@@ -21,3 +21,7 @@ ike_shinnecock.ww3
 #sandy_shinnecock.pam2adc
 #sandy_shinnecock.pam2adc2ww3
 #sandy_shinnecock.pam2ww3
+
+### SCITUATE HARBOR: FVCOM/WW3
+#scituateharbor.atm2fvc2ww3
+#scituateharbor.fvc
