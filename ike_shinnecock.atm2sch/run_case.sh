@@ -59,6 +59,7 @@ export COM_DIR=${COM_DIR:-}
 export BATCH_SYSTEM=${BATCH_SYSTEM:-}
 export BATCH_ACCOUNT=${BATCH_ACCOUNT:-}
 export BATCH_QUEUE=${BATCH_QUEUE:-}
+export BATCH_QOS=${BATCH_QOS:-}
 export BATCH_RUNEXE=${BATCH_RUNEXE:-}
 ##########
 

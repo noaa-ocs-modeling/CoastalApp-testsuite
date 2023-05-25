@@ -127,7 +127,11 @@ export BATCH_ACCOUNT=${BATCH_ACCOUNT:-coastal}
 
 ### This is for the HPC/BATCH_SYSTEM queue to use for the batch job.
 ### The default value is "batch".
-export BATCH_QUEUE=${BATCH_QUEUE:-batch}
+export BATCH_QUEUE=${BATCH_QUEUE:-}
+
+### This is for the HPC/BATCH_SYSTEM queue to use for the batch job.
+### The default value is "batch".
+export BATCH_QOS=${BATCH_QOS:-}
 
 ### This is for the HPC/BATCH_SYSTEM sbatch additional options(SLURM).
 ### The default value is "".
@@ -171,6 +175,7 @@ export TESTS_FILE="${MY_TESTS_FILE}"
 export BATCH_SYSTEM="${MY_BATCH_SYSTEM}"
 export BATCH_ACCOUNT="${MY_BATCH_ACCOUNT}"
 export BATCH_QUEUE="${MY_BATCH_QUEUE}"
+export BATCH_QOS="${MY_BATCH_QOS}"
 export BATCH_SLURM_OPTS="${MY_BATCH_SLURM_OPTS}"
 export BATCH_PBS_OPTS="${MY_BATCH_PBS_OPTS}"
 export BATCH_RUNEXE="${MY_BATCH_RUNEXE}"
@@ -190,6 +195,7 @@ echo "    TESTS_FILE       = ${TESTS_FILE}"
 echo "    BATCH_SYSTEM     = ${BATCH_SYSTEM}"
 echo "    BATCH_ACCOUNT    = ${BATCH_ACCOUNT}"
 echo "    BATCH_QUEUE      = ${BATCH_QUEUE}"
+echo "    BATCH_QOS        = ${BATCH_QOS}"
 echo "    BATCH_SLURM_OPTS = ${BATCH_SLURM_OPTS}"
 echo "    BATCH_PBS_OPTS   = ${BATCH_PBS_OPTS}"
 echo "    BATCH_RUNEXE     = ${BATCH_RUNEXE}"

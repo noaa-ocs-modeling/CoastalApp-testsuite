@@ -66,7 +66,8 @@
 #SBATCH -A coastal
 #SBATCH -J FLOFS_adc_RUN
 #SBATCH -t 02:00:00
-#SBATCH -q batch
+##SBATCH -p hera
+##SBATCH -q batch
 #SBATCH -n 149
 #SBATCH -c 1
 #SBATCH -e FLOFS_adc_RUN.err.log

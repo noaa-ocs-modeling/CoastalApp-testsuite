@@ -42,7 +42,8 @@
 #PBS -A coastal
 #PBS -N IKSH_atm2adc_SETUP
 #PBS -l walltime=00:30:00
-#PBS -q batch
+##PBS -q hera
+##PBS -l qos=batch
 #PBS -l nodes=1
 #PBS -l ppn=1
 #PBS -e IKSH_atm2adc_SETUP.err.log

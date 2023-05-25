@@ -41,8 +41,9 @@
 
 #PBS -A coastal
 #PBS -N SDSH_pam2adc_RUN
-#PBS -l walltime=02:30:00
-#PBS -q batch
+#PBS -l walltime=02:00:00
+##PBS -q hera
+##PBS -l qos=batch
 #PBS -l nodes=1
 #PBS -l ppn=12
 #PBS -e SDSH_pam2adc_RUN.err.log

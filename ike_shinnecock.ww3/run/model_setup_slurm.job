@@ -65,7 +65,8 @@
 #SBATCH -A coastal
 #SBATCH -J IKSH_ww3_SETUP
 #SBATCH -t 01:00:00
-#SBATCH -q batch
+##SBATCH -p hera
+##SBATCH -q batch
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1

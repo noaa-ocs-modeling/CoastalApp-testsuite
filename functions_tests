@@ -38,7 +38,8 @@ ParseArgsTests()
   local all_evars
 
   all_evars="MY_ACCEPT_ALL MY_MOD_FILE MY_BIN_DIR MY_COM_DIR MY_WORK_DIR MY_TESTS_FILE
-             MY_BATCH_SYSTEM MY_BATCH_ACCOUNT MY_BATCH_QUEUE MY_BATCH_SLURM_OPTS MY_BATCH_PBS_OPTS MY_BATCH_RUNEXE"
+             MY_BATCH_SYSTEM MY_BATCH_ACCOUNT MY_BATCH_QUEUE MY_BATCH_QOS
+             MY_BATCH_SLURM_OPTS MY_BATCH_PBS_OPTS MY_BATCH_RUNEXE"
 
   for ival in ${all_evars}; do unset __${ival}; done
 
@@ -51,7 +52,8 @@ ParseArgsTests()
   __MY_TESTS_FILE=${TESTS_FILE:-regtest_list.dat}
   __MY_BATCH_SYSTEM=${BATCH_SYSTEM:-slurm}
   __MY_BATCH_ACCOUNT=${BATCH_ACCOUNT:-coastal}
-  __MY_BATCH_QUEUE=${BATCH_QUEUE:-batch}
+  __MY_BATCH_QUEUE=${BATCH_QUEUE:-}
+  __MY_BATCH_QOS=${BATCH_QOS:-}
   __MY_BATCH_SLURM_OPTS=${BATCH_SLURM_OPTS:-}
   __MY_BATCH_PBS_OPTS=${BATCH_PBS_OPTS:-}
   __MY_BATCH_RUNEXE=${BATCH_RUNEXE:-srun}
@@ -60,7 +62,7 @@ ParseArgsTests()
   # -----
   # Process the function options
   opt_all=( accept_all mod mod_file bin bin_dir com com_dir work work_dir tests tests_file
-            batch batch_system accnt batch_account queue batch_queue
+            batch batch_system accnt batch_account queue batch_queue qos batch_qos
             slurm_opts batch_slurm_opts pbs_opts batch_pbs_opts runexe batch_runexe
             h help )
   opt_all=":$( echo "${opt_all[@]/#/-} ${opt_all[@]/#/--}" | sed 's/ /:/g' ):"
@@ -171,6 +173,14 @@ ParseArgsTests()
           if [ $? -eq 0 ]; then
             if [ "X${opt_arg}" != "X" ]; then
               __MY_BATCH_QUEUE="$( strTrim "${opt_arg}" )"
+            fi
+          fi
+        ;;
+      -qos | --qos | -batch_qos | --batch_qos )
+          checkFuncOpt "--batch_qos"
+          if [ $? -eq 0 ]; then
+            if [ "X${opt_arg}" != "X" ]; then
+              __MY_BATCH_QOS="$( strTrim "${opt_arg}" )"
             fi
           fi
         ;;
@@ -290,9 +300,17 @@ UsageTests()
   echo "    Default: coastal."
   echo
   #---
-  echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (REQUIRED)"
-  echo "    The cluster batch queue to use."
-  echo "    Default: batch."
+  echo "  -queue|--queue|-batch_queue|--batch_queue [=|space] \"hpc_batch_queue\" (OPTIONAL/REQUIRED per HPC cluster)"
+  echo "    The cluster batch queue/partition to use. This is an HPC cluster platform specific. In the RDHPCS HPC"
+  echo "    platforms the "queue/patition" name is optional. In other HPC platforms (e.g., TACC) it is required to supply"
+  echo "    a valid partition name."
+  echo "    Default: none (on the RDHPCS platforms it is not necessary to supply a \"partition\" but maybe just a \"qos\")."
+  echo
+  #---
+  echo "  -qos|--qos|-batch_qos|--batch_qos [=|space] \"hpc_batch_qos\" (OPTIONAL/REQUIRED per HPC cluster)"
+  echo "    The cluster batch Quality of Service (QoS) to use. This is an HPC cluster platform specific. In the RDHPCS HPC"
+  echo "    platforms the available QoSes are: batch, windfall, debug, urgent, novel (depending upon the partition used)."
+  echo "    Default: batch (this is valid only in the RDHPCS platforms)."
   echo
   #---
   echo "  -slurm_opts|--slurm_opts|-batch_slurm_opts|--batch_slurm_opts [=|space] \"hpc_slurm_options\" (OPTIONAL)"

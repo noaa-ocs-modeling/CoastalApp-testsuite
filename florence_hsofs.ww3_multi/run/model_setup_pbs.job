@@ -42,7 +42,8 @@
 #PBS -A coastal
 #PBS -N FLOFS_ww3_multi_SETUP
 #PBS -l walltime=01:00:00
-#PBS -q batch
+##PBS -q hera
+##PBS -l qos=batch
 #PBS -l nodes=1
 #PBS -l ppn=1
 #PBS -e FLOFS_ww3_multi_SETUP.err.log

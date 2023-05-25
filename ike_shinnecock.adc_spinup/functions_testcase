@@ -46,7 +46,7 @@ model_run()
   fi
 
 
-  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_PARTITION:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
+  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
   pbsOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-q ${BATCH_QUEUE}} ${BATCH_PBS_OPTS:+${BATCH_PBS_OPTS}}"
 
   use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
@@ -56,12 +56,12 @@ model_run()
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
           setup_jobid="$(sbatch ${slurmOPTS} model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+            setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
           jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${setup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         else
           jobid="$(sbatch ${slurmOPTS} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
 
@@ -73,12 +73,12 @@ model_run()
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
           setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+            setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
           jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         else
           jobid="$(qsub ${pbsOPTS} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
 
@@ -135,7 +135,7 @@ model_spinup_run()
     exit 1
   fi
 
-  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_PARTITION:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
+  slurmOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-p ${BATCH_QUEUE}} ${BATCH_SLURM_OPTS:+${BATCH_SLURM_OPTS}}"
   pbsOPTS="${BATCH_ACCOUNT:+-A ${BATCH_ACCOUNT}} ${BATCH_QUEUE:+-q ${BATCH_QUEUE}} ${BATCH_PBS_OPTS:+${BATCH_PBS_OPTS}}"
 
   use_batch="$( echo "${BATCH_SYSTEM}" | tr '[:lower:]' '[:upper:]' )"
@@ -145,12 +145,12 @@ model_spinup_run()
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
           setup_jobid="$(sbatch ${slurmOPTS} model_setup_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+            setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
           jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${setup_jobid}:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         else
           jobid="$(sbatch ${slurmOPTS} --dependency=afterok:${spinup_jobid} model_run_slurm.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
 
@@ -162,12 +162,12 @@ model_spinup_run()
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
           setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            setup_jobid=$(echo "${setup_jobid}" | awk '{print $NF}')
+            setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
           jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         else
           jobid="$(qsub ${pbsOPTS} -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
-            jobid=$(echo "${jobid}" | awk '{print $NF}')
+            jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
 

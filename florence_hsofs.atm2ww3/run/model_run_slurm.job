@@ -66,7 +66,8 @@
 #SBATCH -A coastal
 #SBATCH -J FLOFS_atm2ww3_RUN
 #SBATCH -t 08:00:00
-#SBATCH -q batch
+##SBATCH -p hera
+##SBATCH -q batch
 #SBATCH -n 350
 ##SBATCH -c 1
 #SBATCH -N 15

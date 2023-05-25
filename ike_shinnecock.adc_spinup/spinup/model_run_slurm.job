@@ -65,8 +65,9 @@
 
 #SBATCH -A coastal
 #SBATCH -J IKSH_adc_RUN
-#SBATCH -t 02:30:00
-#SBATCH -q batch
+#SBATCH -t 02:00:00
+##SBATCH -p hera
+##SBATCH -q batch
 #SBATCH -N 1
 #SBATCH -n 11
 #SBATCH -c 1

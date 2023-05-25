@@ -66,7 +66,8 @@
 #SBATCH -A coastal
 #SBATCH -J SCI_atm2fvc2ww3_RUN
 #SBATCH -t 02:00:00
-#SBATCH -q batch
+##SBATCH -p hera
+##SBATCH -q batch
 #SBATCH -N 1
 #SBATCH -n 24
 ##SBATCH -c 1

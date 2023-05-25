@@ -65,7 +65,7 @@ BATCH_SYSTEM=
 ### REQUIRED
 ### DEFAULT: coastal
 
-BATCH_ACCOUNT=
+BATCH_ACCOUNT=OCE22003
 
 
 ##########
@@ -76,7 +76,7 @@ BATCH_ACCOUNT=
 ### OPTIONAL/REQUIRED
 ### DEFAULT: none
 
-BATCH_QUEUE=
+BATCH_QUEUE=development
 
 
 ##########
@@ -87,7 +87,7 @@ BATCH_QUEUE=
 ### can be used (depending upon the partition used).
 ### In other HPC platforms (e.g TACC) it is not required and it is optional.
 ### OPTIONAL/REQUIRED
-### DEFAULT: batch
+### DEFAULT: none
 
 BATCH_QOS=
 
@@ -95,7 +95,9 @@ BATCH_QOS=
 ##########
 ### BATCH_SLURM_OPTS: Additional command line options to pass to the sbatch program (for SLURM batch system only)
 ### DEFAULT: none
+
 BATCH_SLURM_OPTS=
+
 
 ##########
 ### Additional command line options to pass to the qsub program (for PBS batch system only)
@@ -113,4 +115,4 @@ BATCH_PBS_OPTS=
 ### for example under "slurm" the run executable is "srun" (in TACC HPC they use "ibrun" which
 ### is a wrapper to "srun". Under "pbs" the run executable might be "mpirun/mpiexec". And so on ...
 
-BATCH_RUNEXE=
+BATCH_RUNEXE=ibrun
