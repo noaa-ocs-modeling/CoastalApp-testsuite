@@ -1,2 +1,2 @@
- atm_dir: . 
+ atm_dir: ./input
  atm_nam: sciww3_forcing.nc 
