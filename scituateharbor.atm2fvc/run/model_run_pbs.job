@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+###########################################################################
+## Author:  Panagiotis Velissariou <panagiotis.velissariou@noaa.gov>
+##
+## Version: 1.0
+##
+## Version - 1.0 Fri Feb 10 2023
+###########################################################################
+
+
+###########################################################################
+## Can run this slurm script by suppling command line options.
+## Example: qsub [options] this_script [options to this_script]
+#####
+
+##### Options below explained.
+########################################
+## Comments are defined by double hash marks if before the actual PBS directives
+##
+## -S MY_SHELL (full path)
+## -l nodes=N:ppn=M (preferably use the following option)
+## -l nodes=N
+## Specifies maximum wall time (real time, not CPU time)
+## -l walltime=HH:MM:SS
+## -A MY_PROJECT_ACCOUNT (coastal, ohd)
+## -N MY_UNIQUE_JOB_TITLE
+## -o MY_UNIQUE_JOB_LOG_FILENAME
+## -e MY_UNIQUE_JOB_ERROR_FILENAME
+## Sets the name of the queue to submit your job to. The default is the "batch" queue.
+## -q MY_QUEUE_SYSTEM (batch, debug)
+## Place output files in the working directory. The default is home directory
+## Rerun this jobif it fails
+## -r MY_RERUN_OPTION (y(es)/n(o))
+## Request a status email when the job begins (b), ends(e) or aborts (a)
+## The n option requests no email,but you will still get email if the job aborts
+## -m MY_EMAIL_OPTIONS (n/p)
+## -M MY_EMAIL_USER(S) (defaults to the submitting user)
+###########################################################################
+
+#PBS -A coastal
+#PBS -N SCI_fvc_RUN
+#PBS -l walltime=02:00:00
+##PBS -q hera
+##PBS -l qos=batch
+#PBS -l nodes=1:ppn=13:twelvecore
+##PBS -l ppn=12
+#PBS -e SCI_fvc_RUN.err.log
+#PBS -o SCI_fvc_RUN.out.log
+##PBS -l mem 3000
+##PBS -M USER@noaa.gov
+##PBS -m abe
+
+set -e
+
+if [ -e "${MOD_FILE}" ]; then
+  source ${MOD_FILE}
+  eval `modulecmd bash list`
+echo "The module file: <${MOD_FILE}>"
+else
+  echo "The module file: <${MOD_FILE}> is not found"
+  echo "Will continue without loading any OS defined modules"
+fi
+
+#echo Modified Working dir is: `echo $PBS_O_WORKDIR | sed 's_/hosts/hydra/_/_'`
+cd `echo $PBS_O_WORKDIR | sed 's_/hosts/hydra/_/_'`
+
+${BATCH_RUNEXE} ${BIN_DIR:+${BIN_DIR}/}NEMS.x

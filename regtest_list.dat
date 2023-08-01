@@ -23,5 +23,6 @@
 #sandy_shinnecock.pam2ww3
 
 ### SCITUATE HARBOR: FVCOM/WW3
-#scituateharbor.atm2fvc2ww3
-#scituateharbor.fvc
+#scituateharbor.atm2fvc
+#scituateharbor_3D.atm2fvc2ww3
+#scituateharbor_3D.fvc
