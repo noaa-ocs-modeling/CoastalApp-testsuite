@@ -72,12 +72,12 @@ model_run()
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(qsub -V ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
-          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub -V ${pbsOPTS} -W depend=afterok:${setup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo ${jobid} | awk '{print $NF}')
         else
-          jobid="$(qsub ${pbsOPTS} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub -V ${pbsOPTS} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
@@ -161,12 +161,12 @@ model_spinup_run()
       ### run model simulation (spinup or run)
       pushd ${use_dir} >/dev/null 2>&1
         if [ -e model_setup_slurm.job ]; then
-          setup_jobid="$(qsub ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          setup_jobid="$(qsub -V ${pbsOPTS} model_setup_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             setup_jobid=$(echo ${setup_jobid} | awk '{print $NF}')
-          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub -V ${pbsOPTS} -W depend=afterok:${setup_jobid}:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo ${jobid} | awk '{print $NF}')
         else
-          jobid="$(qsub ${pbsOPTS} -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
+          jobid="$(qsub -V ${pbsOPTS} -W depend=afterok:${spinup_jobid} model_run_pbs.job | awk 'match($0,/[0-9]+/){print substr($0, RSTART, RLENGTH)}')"
             jobid=$(echo ${jobid} | awk '{print $NF}')
         fi
       popd >/dev/null 2>&1
