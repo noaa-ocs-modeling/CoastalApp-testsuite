@@ -93,18 +93,18 @@ if [ -d "${COM_DIR}" ]; then
     fi
     ##### END:: FVCOM #####
 
-    ##### BEG:: Atmospheric data #####
-    ### (C) Atmospheric forcing data file for FVCOM
-    finp="${COM_DIR}/data/atm/sci_ww3_forcing_20220621.nc"
-    fout="input/sciww3_forcing.nc"
-    if [ -f ${finp} ]; then
-      [ -f ${fout} ] && rm -f ${fout}
-      ln -sf ${finp} ${fout}
-    else
-      echo "ERROR:: The required fvcom file ${finp} is not found."
-      error=$((error + 1))
-    fi
-    ##### END:: Atmospheric data #####
+#   ##### BEG:: Atmospheric data #####
+#   ### (C) Atmospheric forcing data file for FVCOM
+#   finp="${COM_DIR}/data/atm/sci_ww3_forcing_20220621.nc"
+#   fout="input/sciww3_forcing.nc"
+#   if [ -f ${finp} ]; then
+#     [ -f ${fout} ] && rm -f ${fout}
+#     ln -sf ${finp} ${fout}
+#   else
+#     echo "ERROR:: The required fvcom file ${finp} is not found."
+#     error=$((error + 1))
+#   fi
+#   ##### END:: Atmospheric data #####
   popd >/dev/null 2>&1
 else
   echo "ERROR:: The required data directory COM_DIR = <${COM_DIR}> is not found."
